@@ -12,7 +12,6 @@ namespace medicitass
         private Form formularioLogin;
 
         // Constructor para diseño y vista previa.
-        // No concede permisos de acceso.
         public FrmMenuPrincipal()
         {
             InitializeComponent();
@@ -28,7 +27,6 @@ namespace medicitass
         public FrmMenuPrincipal(
             string usuario,
             string rol,
-            Form login = null)
         {
             InitializeComponent();
 
@@ -39,11 +37,10 @@ namespace medicitass
             ConfigurarSesion();
         }
 
-        private void ConfigurarSesion()
+        private void FrmMenuPrincipal_Load(object sender, EventArgs e)
         {
-            lblBienvenida.Text = "Bienvenido, " +
-                (string.IsNullOrEmpty(usuarioActual)
-                    ? "Usuario" : usuarioActual);
+            this.IsMdiContainer = true;
+        }
 
             lblRol.Text = "Rol: " + rolActual;
 

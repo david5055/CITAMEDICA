@@ -1,4 +1,3 @@
-﻿
 namespace medicitass
 {
     partial class FrmMenuPrincipal
@@ -67,9 +66,6 @@ namespace medicitass
             this.mnuInicio = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMantenimientos = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuConsultas = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuCitas = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuSesion = new System.Windows.Forms.ToolStripMenuItem();
-
             this.mnuPacientes = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuDoctores = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuEspecialidades = new System.Windows.Forms.ToolStripMenuItem();
