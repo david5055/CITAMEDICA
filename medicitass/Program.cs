@@ -16,7 +16,7 @@ namespace medicitass
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmMenuPrincipal("Daviid", "Administrador"));
+            Application.Run(new FrmMenuPrincipal("David", "Administrador"));
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace medicitass
 {
-    partial class FrmConsultaAgendaDoctor
+    partial class FrmMatenimientoRoles
     {
         private System.ComponentModel.IContainer components = null;
 
