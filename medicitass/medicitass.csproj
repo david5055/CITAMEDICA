@@ -66,15 +66,32 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLogin.Designer.cs">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmPruebaConexion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmPruebaConexion.Designer.cs">
+      <DependentUpon>FrmPruebaConexion.cs</DependentUpon>
+    </Compile>
     <Compile Include="mantenimineto.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="mantenimineto.Designer.cs">
       <DependentUpon>mantenimineto.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program - Copia.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmLogin.resx">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmPruebaConexion.resx">
+      <DependentUpon>FrmPruebaConexion.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
