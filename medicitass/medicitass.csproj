@@ -54,6 +54,12 @@
     </Compile>
     <Compile Include="Conexion.cs" />
     <Compile Include="DoctorDavid.cs" />
+    <Compile Include="FrmBusquedaGeneral.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmBusquedaGeneral.Designer.cs">
+      <DependentUpon>FrmBusquedaGeneral.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmConsultaAgendaDoctor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,6 +71,18 @@
     </Compile>
     <Compile Include="FrmConsultaAgendaFecha.Designer.cs">
       <DependentUpon>FrmConsultaAgendaFecha.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmConsultaCitasCanceladas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmConsultaCitasCanceladas.Designer.cs">
+      <DependentUpon>FrmConsultaCitasCanceladas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmConsultaDisponibilidad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmConsultaDisponibilidad.Designer.cs">
+      <DependentUpon>FrmConsultaDisponibilidad.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmMantenimientoUsuarios.cs">
       <SubType>Form</SubType>
@@ -116,11 +134,20 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmBusquedaGeneral.resx">
+      <DependentUpon>FrmBusquedaGeneral.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmConsultaAgendaDoctor.resx">
       <DependentUpon>FrmConsultaAgendaDoctor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmConsultaAgendaFecha.resx">
       <DependentUpon>FrmConsultaAgendaFecha.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmConsultaCitasCanceladas.resx">
+      <DependentUpon>FrmConsultaCitasCanceladas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmConsultaDisponibilidad.resx">
+      <DependentUpon>FrmConsultaDisponibilidad.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
