@@ -66,6 +66,12 @@
     <Compile Include="FrmConsultaAgendaFecha.Designer.cs">
       <DependentUpon>FrmConsultaAgendaFecha.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmConsultaHistorialPaciente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmConsultaHistorialPaciente.Designer.cs">
+      <DependentUpon>FrmConsultaHistorialPaciente.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmMantenimientoUsuarios.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +102,12 @@
     <Compile Include="FrmMantenimientoPacientes.Designer.cs">
       <DependentUpon>FrmMantenimientoPacientes.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmMarcarAtendida.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmMarcarAtendida.Designer.cs">
+      <DependentUpon>FrmMarcarAtendida.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmMenuPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +134,9 @@
     <EmbeddedResource Include="FrmConsultaAgendaFecha.resx">
       <DependentUpon>FrmConsultaAgendaFecha.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmConsultaHistorialPaciente.resx">
+      <DependentUpon>FrmConsultaHistorialPaciente.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
     </EmbeddedResource>
@@ -136,6 +151,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMantenimientoUsuarios.resx">
       <DependentUpon>FrmMantenimientoUsuarios.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmMarcarAtendida.resx">
+      <DependentUpon>FrmMarcarAtendida.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMenuPrincipal.resx">
       <DependentUpon>FrmMenuPrincipal.cs</DependentUpon>
