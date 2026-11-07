@@ -60,6 +60,12 @@
     <Compile Include="FrmBusquedaGeneral.Designer.cs">
       <DependentUpon>FrmBusquedaGeneral.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmCancelarCita.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmCancelarCita.Designer.cs">
+      <DependentUpon>FrmCancelarCita.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmConsultaAgendaDoctor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +158,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmCancelarCita.resx">
+      <DependentUpon>FrmCancelarCita.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmConsultaAgendaDoctor.resx">
       <DependentUpon>FrmConsultaAgendaDoctor.cs</DependentUpon>
     </EmbeddedResource>
