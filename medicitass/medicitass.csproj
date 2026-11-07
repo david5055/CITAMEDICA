@@ -54,6 +54,12 @@
     </Compile>
     <Compile Include="Conexion.cs" />
     <Compile Include="DoctorDavid.cs" />
+    <Compile Include="FrmConsultaAgendaFecha.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmConsultaAgendaFecha.Designer.cs">
+      <DependentUpon>FrmConsultaAgendaFecha.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmMantenimientoUsuarios.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +110,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmConsultaAgendaFecha.resx">
+      <DependentUpon>FrmConsultaAgendaFecha.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
     </EmbeddedResource>
