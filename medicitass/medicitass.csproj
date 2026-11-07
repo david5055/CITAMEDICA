@@ -126,6 +126,12 @@
     <Compile Include="FrmPruebaConexion.Designer.cs">
       <DependentUpon>FrmPruebaConexion.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmReprogramarCita.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmReprogramarCita.Designer.cs">
+      <DependentUpon>FrmReprogramarCita.cs</DependentUpon>
+    </Compile>
     <Compile Include="mantenimineto.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -169,6 +175,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmPruebaConexion.resx">
       <DependentUpon>FrmPruebaConexion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmReprogramarCita.resx">
+      <DependentUpon>FrmReprogramarCita.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
