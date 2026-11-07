@@ -72,6 +72,12 @@
     <Compile Include="FrmConsultaAgendaFecha.Designer.cs">
       <DependentUpon>FrmConsultaAgendaFecha.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmConsultaCitasCanceladas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmConsultaCitasCanceladas.Designer.cs">
+      <DependentUpon>FrmConsultaCitasCanceladas.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmConsultaDisponibilidad.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmConsultaAgendaFecha.resx">
       <DependentUpon>FrmConsultaAgendaFecha.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmConsultaCitasCanceladas.resx">
+      <DependentUpon>FrmConsultaCitasCanceladas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmConsultaDisponibilidad.resx">
       <DependentUpon>FrmConsultaDisponibilidad.cs</DependentUpon>

@@ -1,10 +1,9 @@
-﻿using medicitass;
-using System;
+﻿using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace MediCitas
+namespace medicitass
 {
     public partial class FrmConsultaCitasCanceladas : Form
     {
@@ -15,7 +14,6 @@ namespace MediCitas
 
         private void FrmConsultaCitasCanceladas_Load(object sender, EventArgs e)
         {
-            // Establecer rango por defecto (desde inicio de mes actual hasta el día de hoy)
             DateTime hoy = DateTime.Today;
             dtpFechaInicio.Value = new DateTime(hoy.Year, hoy.Month, 1);
             dtpFechaFin.Value = hoy;
@@ -86,6 +84,11 @@ namespace MediCitas
             {
                 MessageBox.Show("Error al cargar el reporte de citas canceladas: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void lblTitulo_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

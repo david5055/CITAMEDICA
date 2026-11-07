@@ -1,16 +1,9 @@
-﻿namespace MediCitas
+﻿namespace medicitass
 {
     partial class FrmConsultaCitasCanceladas
     {
-        /// <summary>
-        /// Variable del diseñador necesaria.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Limpiar los recursos que se estén usando.
-        /// </summary>
-        /// <param name="disposing">true si los recursos administrados se deben eliminar; de lo contrario, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,10 +15,6 @@
 
         #region Código generado por el Diseñador de Windows Forms
 
-        /// <summary>
-        /// Método necesario para admitir el Diseñador. No se puede modificar
-        /// el contenido de este método con el editor de código.
-        /// </summary>
         private void InitializeComponent()
         {
             this.panelTop = new System.Windows.Forms.Panel();
@@ -63,9 +52,10 @@
             this.lblTitulo.Location = new System.Drawing.Point(27, 15);
             this.lblTitulo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(542, 37);
+            this.lblTitulo.Size = new System.Drawing.Size(398, 37);
             this.lblTitulo.TabIndex = 0;
-            this.lblTitulo.Text = "Auditoría de Citas Canceladas / Anuladas";
+            this.lblTitulo.Text = "Auditoría de Citas Canceladas";
+            this.lblTitulo.Click += new System.EventHandler(this.lblTitulo_Click);
             // 
             // groupBoxFiltros
             // 
