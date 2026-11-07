@@ -1,10 +1,9 @@
-﻿using medicitass;
-using System;
+﻿using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace MediCitas
+namespace medicitass
 {
     public partial class FrmConsultaDisponibilidad : Form
     {
@@ -105,8 +104,7 @@ namespace MediCitas
             {
                 using (SqlConnection conexion = new Conexion().Conectar())
                 {
-                    // 1. Obtener la franja horaria del doctor para ese día de la semana según la base de datos
-                    // El día de la semana en la BD se evalúa como texto ('Lunes', 'Martes', etc.)
+                    conexion.Open();
                     string diaSemana = ObtenerNombreDiaEsp(fecha.DayOfWeek);
 
                     string queryHorario = "SELECT hora_inicio, hora_fin FROM Horarios_Doctor WHERE id_doctor = @id_doctor AND dia_semana = @dia_semana AND estado = 'Activo'";
@@ -125,11 +123,9 @@ namespace MediCitas
                         return;
                     }
 
-                    // Tomamos la primera franja configurada para el día
                     TimeSpan horaInicio = (TimeSpan)dtHorarios.Rows[0]["hora_inicio"];
                     TimeSpan horaFin = (TimeSpan)dtHorarios.Rows[0]["hora_fin"];
 
-                    // 2. Generar bloques de 30 minutos y consultar la función dbo.fn_HorarioDisponible
                     TimeSpan intervalo = TimeSpan.FromMinutes(30);
                     TimeSpan horaActualBloque = horaInicio;
 
@@ -137,7 +133,6 @@ namespace MediCitas
                     {
                         TimeSpan horaSiguiente = horaActualBloque.Add(intervalo);
 
-                        // Consultar la función escalable fn_HorarioDisponible
                         string queryFunc = "SELECT dbo.fn_HorarioDisponible(@id_doctor, @fecha, @hora_inicio)";
                         SqlCommand cmdFunc = new SqlCommand(queryFunc, conexion);
                         cmdFunc.Parameters.AddWithValue("@id_doctor", idDoctor);
