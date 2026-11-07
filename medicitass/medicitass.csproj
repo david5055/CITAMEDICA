@@ -72,6 +72,18 @@
     <Compile Include="FrmConsultaAgendaFecha.Designer.cs">
       <DependentUpon>FrmConsultaAgendaFecha.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmConsultaHistorialPaciente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmConsultaHistorialPaciente.Designer.cs">
+      <DependentUpon>FrmConsultaHistorialPaciente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmMantenimientoRoles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmMantenimientoRoles.Designer.cs">
+      <DependentUpon>FrmMantenimientoRoles.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmMantenimientoUsuarios.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -151,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMantenimientoPacientes.resx">
       <DependentUpon>FrmMantenimientoPacientes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmMantenimientoRoles.resx">
+      <DependentUpon>FrmMantenimientoRoles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMantenimientoUsuarios.resx">
       <DependentUpon>FrmMantenimientoUsuarios.cs</DependentUpon>
