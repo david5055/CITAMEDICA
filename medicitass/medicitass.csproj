@@ -102,6 +102,24 @@
     <Compile Include="FrmConsultaHistorialPaciente.Designer.cs">
       <DependentUpon>FrmConsultaHistorialPaciente.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmInicioAdministrador.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmInicioAdministrador.Designer.cs">
+      <DependentUpon>FrmInicioAdministrador.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmInicioDoctor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmInicioDoctor.Designer.cs">
+      <DependentUpon>FrmInicioDoctor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmInicioRecepcionista.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmInicioRecepcionista.Designer.cs">
+      <DependentUpon>FrmInicioRecepcionista.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmMantenimientoRoles.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,6 +188,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SeguridadPassword.cs" />
     <EmbeddedResource Include="FrmAgendarCita.resx">
       <DependentUpon>FrmAgendarCita.cs</DependentUpon>
     </EmbeddedResource>
@@ -187,6 +206,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmConsultaDisponibilidad.resx">
       <DependentUpon>FrmConsultaDisponibilidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmInicioAdministrador.resx">
+      <DependentUpon>FrmInicioAdministrador.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmInicioDoctor.resx">
+      <DependentUpon>FrmInicioDoctor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmInicioRecepcionista.resx">
+      <DependentUpon>FrmInicioRecepcionista.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>

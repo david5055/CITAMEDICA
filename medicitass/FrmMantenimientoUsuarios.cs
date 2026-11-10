@@ -1,421 +1,616 @@
-﻿using System;
+﻿
+using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Security.Cryptography;
-using System.Text;
 using System.Windows.Forms;
 
 namespace medicitass
 {
     public partial class FrmMantenimientoUsuarios : Form
     {
-        private Conexion conexion = new Conexion();
+        private readonly Conexion conexion = new Conexion();
 
         public FrmMantenimientoUsuarios()
         {
             InitializeComponent();
         }
 
-        private void FrmMantenimientoUsuarios_Load(object sender, EventArgs e)
+        private void FrmMantenimientoUsuarios_Load(
+            object sender, EventArgs e)
         {
             CargarComboRoles();
-            LimpiarCampos();
+            CargarEstados();
             CargarUsuarios();
+            LimpiarCampos();
         }
 
-        #region Carga de Datos y Limpieza
-
+        // =========================================
+        // CARGAR ROLES
+        // =========================================
         private void CargarComboRoles()
         {
             try
             {
-                using (SqlConnection conn = conexion.Conectar())
+                using (SqlConnection cn = conexion.Conectar())
                 {
-                    string query = "SELECT id_rol, nombre_rol FROM Roles ORDER BY id_rol ASC";
-                    SqlDataAdapter da = new SqlDataAdapter(query, conn);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
+                    string sql = @"
+                        SELECT id_rol, nombre_rol
+                        FROM Roles
+                        ORDER BY id_rol";
 
-                    cboRol.DataSource = dt;
-                    cboRol.DisplayMember = "nombre_rol";
-                    cboRol.ValueMember = "id_rol";
+                    using (SqlDataAdapter da =
+                        new SqlDataAdapter(sql, cn))
+                    {
+                        DataTable tabla = new DataTable();
+                        da.Fill(tabla);
+
+                        cboRol.DataSource = tabla;
+                        cboRol.DisplayMember = "nombre_rol";
+                        cboRol.ValueMember = "id_rol";
+                        cboRol.SelectedIndex = -1;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar la lista de roles: " + ex.Message, "Error SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Error al cargar roles: " + ex.Message);
             }
         }
 
+        // =========================================
+        // CARGAR ESTADOS
+        // =========================================
+        private void CargarEstados()
+        {
+            cboEstado.Items.Clear();
+            cboEstado.Items.Add("Activo");
+            cboEstado.Items.Add("Inactivo");
+            cboEstado.SelectedIndex = 0;
+        }
+
+        // =========================================
+        // CARGAR USUARIOS
+        // =========================================
         private void CargarUsuarios(string filtro = "")
         {
             try
             {
-                using (SqlConnection conn = conexion.Conectar())
+                using (SqlConnection cn = conexion.Conectar())
                 {
-                    string query = @"SELECT u.id_usuario AS [Código], 
-                                            u.nombre_usuario AS [Nombre de Usuario], 
-                                            r.nombre_rol AS [Rol], 
-                                            u.id_rol AS [IdRol], 
-                                            u.estado AS [Estado], 
-                                            ISNULL(u.intentos_fallidos, 0) AS [Intentos Fallidos]
-                                     FROM Usuarios u
-                                     INNER JOIN Roles r ON u.id_rol = r.id_rol";
+                    string sql = @"
+                        SELECT
+                            u.id_usuario AS [Código],
+                            u.nombre_usuario AS [Nombre de Usuario],
+                            r.nombre_rol AS [Rol],
+                            u.id_rol AS [IdRol],
+                            u.estado AS [Estado],
+                            ISNULL(u.intentos_fallidos, 0)
+                                AS [Intentos Fallidos],
+                            CASE
+                                WHEN u.contrasena_hash
+                                    LIKE 'PBKDF2-SHA256$%'
+                                    THEN 'Configurada'
+                                WHEN u.contrasena_hash =
+                                    'PENDIENTE_HASH_CSHARP'
+                                    THEN 'Pendiente'
+                                ELSE 'Requiere actualizar'
+                            END AS [Contraseña]
+                        FROM Usuarios u
+                        INNER JOIN Roles r
+                            ON u.id_rol = r.id_rol
+                        WHERE
+                            u.nombre_usuario LIKE @filtro
+                            OR r.nombre_rol LIKE @filtro
+                        ORDER BY u.id_usuario DESC";
 
-                    if (!string.IsNullOrWhiteSpace(filtro))
+                    using (SqlCommand cmd =
+                        new SqlCommand(sql, cn))
                     {
-                        query += " WHERE u.nombre_usuario LIKE @filtro OR r.nombre_rol LIKE @filtro";
-                    }
+                        cmd.Parameters.Add(
+                            "@filtro", SqlDbType.VarChar, 100
+                        ).Value = "%" + filtro.Trim() + "%";
 
-                    query += " ORDER BY u.id_usuario DESC";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        if (!string.IsNullOrWhiteSpace(filtro))
+                        using (SqlDataAdapter da =
+                            new SqlDataAdapter(cmd))
                         {
-                            cmd.Parameters.AddWithValue("@filtro", "%" + filtro.Trim() + "%");
-                        }
+                            DataTable tabla = new DataTable();
+                            da.Fill(tabla);
 
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
-                        dgvUsuarios.DataSource = dt;
+                            dgvUsuarios.DataSource = tabla;
 
-                        if (dgvUsuarios.Columns.Contains("IdRol"))
-                        {
-                            dgvUsuarios.Columns["IdRol"].Visible = false;
+                            if (dgvUsuarios.Columns.Contains("IdRol"))
+                            {
+                                dgvUsuarios.Columns["IdRol"].Visible =
+                                    false;
+                            }
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar la lista de usuarios: " + ex.Message, "Error SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Error al cargar usuarios: " + ex.Message);
             }
         }
 
+        // =========================================
+        // LIMPIAR CAMPOS
+        // =========================================
         private void LimpiarCampos()
         {
             txtIdUsuario.Clear();
             txtNombreUsuario.Clear();
             txtContrasena.Clear();
-            if (cboRol.Items.Count > 0) cboRol.SelectedIndex = 0;
-            cboEstado.SelectedIndex = 0; // "Activo"
+
+            if (cboRol.Items.Count > 0)
+                cboRol.SelectedIndex = -1;
+
+            if (cboEstado.Items.Count > 0)
+                cboEstado.SelectedIndex = 0;
 
             btnGuardar.Enabled = true;
             btnModificar.Enabled = false;
             btnInactivar.Enabled = false;
 
+            dgvUsuarios.ClearSelection();
             txtNombreUsuario.Focus();
         }
 
-        #endregion
-
-        #region Utilidades de Seguridad (Hash SHA-256)
-
-        private string HashPassword(string text)
+        // =========================================
+        // VALIDAR CAMPOS
+        // =========================================
+        private bool ValidarCampos(bool nuevo)
         {
-            using (SHA256 sha256 = SHA256.Create())
+            if (string.IsNullOrWhiteSpace(
+                txtNombreUsuario.Text))
             {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(text));
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
-            }
-        }
-
-        #endregion
-
-        #region Validaciones de Negocio
-
-        private bool ValidarCampos(bool esNuevo)
-        {
-            // 1. Nombre de Usuario obligatorio
-            if (string.IsNullOrWhiteSpace(txtNombreUsuario.Text))
-            {
-                MessageBox.Show("Ingrese el nombre de usuario (username).", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Debe ingresar el nombre de usuario.");
                 txtNombreUsuario.Focus();
                 return false;
             }
 
-            // 2. Rol obligatorio
-            if (cboRol.SelectedIndex == -1 || cboRol.SelectedValue == null)
+            if (txtNombreUsuario.Text.Trim().Length > 50)
             {
-                MessageBox.Show("Debe seleccionar un rol para el usuario.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cboRol.Focus();
+                MessageBox.Show(
+                    "El nombre no puede superar 50 caracteres.");
                 return false;
             }
 
-            // 3. Validación de Contraseña (Longitud Mínima 8 Caracteres)
-            if (esNuevo)
+            if (cboRol.SelectedValue == null ||
+                cboRol.SelectedValue is DataRowView)
             {
-                if (string.IsNullOrWhiteSpace(txtContrasena.Text))
-                {
-                    MessageBox.Show("Debe ingresar una contraseña para el nuevo usuario.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtContrasena.Focus();
-                    return false;
-                }
-
-                if (txtContrasena.Text.Length < 8)
-                {
-                    MessageBox.Show("La contraseña debe tener una longitud mínima de 8 caracteres.", "Seguridad de Clave", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtContrasena.Focus();
-                    return false;
-                }
+                MessageBox.Show(
+                    "Seleccione un rol válido.");
+                return false;
             }
-            else
+
+            if (cboEstado.SelectedItem == null)
             {
-                // Si se escribe una nueva clave en modificación, debe cumplir la regla de 8 caracteres
-                if (!string.IsNullOrWhiteSpace(txtContrasena.Text) && txtContrasena.Text.Length < 8)
-                {
-                    MessageBox.Show("La nueva contraseña debe tener una longitud mínima de 8 caracteres.", "Seguridad de Clave", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtContrasena.Focus();
-                    return false;
-                }
+                MessageBox.Show(
+                    "Seleccione un estado.");
+                return false;
+            }
+
+            bool hayClave =
+                !string.IsNullOrEmpty(txtContrasena.Text);
+
+            if (nuevo && !hayClave)
+            {
+                MessageBox.Show(
+                    "Debe ingresar una contraseña.");
+                txtContrasena.Focus();
+                return false;
+            }
+
+            if (hayClave && txtContrasena.Text.Length < 8)
+            {
+                MessageBox.Show(
+                    "La contraseña debe tener al menos 8 caracteres.");
+                txtContrasena.Focus();
+                return false;
+            }
+
+            if (hayClave &&
+                txtContrasena.Text.Length > 128)
+            {
+                MessageBox.Show(
+                    "La contraseña no puede superar 128 caracteres.");
+                return false;
             }
 
             return true;
         }
 
-        private bool ExisteUsername(string username, int idExcluir = 0)
+        // =========================================
+        // COMPROBAR NOMBRE DUPLICADO
+        // =========================================
+        private bool ExisteUsername(
+            SqlConnection cn,
+            string username,
+            int excluirId)
         {
-            try
-            {
-                using (SqlConnection conn = conexion.Conectar())
-                {
-                    conn.Open();
-                    string query = "SELECT COUNT(*) FROM Usuarios WHERE nombre_usuario = @username AND id_usuario <> @idExcluir";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@username", username.Trim());
-                        cmd.Parameters.AddWithValue("@idExcluir", idExcluir);
+            string sql = @"
+                SELECT COUNT(*)
+                FROM Usuarios
+                WHERE nombre_usuario = @nombre
+                  AND id_usuario <> @id";
 
-                        int count = Convert.ToInt32(cmd.ExecuteScalar());
-                        return count > 0;
-                    }
-                }
-            }
-            catch (Exception ex)
+            using (SqlCommand cmd =
+                new SqlCommand(sql, cn))
             {
-                MessageBox.Show("Error al verificar la unicidad del nombre de usuario: " + ex.Message, "Error SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return true;
+                cmd.Parameters.Add(
+                    "@nombre", SqlDbType.VarChar, 50
+                ).Value = username;
+
+                cmd.Parameters.Add(
+                    "@id", SqlDbType.Int
+                ).Value = excluirId;
+
+                return Convert.ToInt32(
+                    cmd.ExecuteScalar()) > 0;
             }
         }
 
-        #endregion
-
-        #region Operaciones CRUD
-
-        private void btnGuardar_Click(object sender, EventArgs e)
+        // =========================================
+        // GUARDAR USUARIO
+        // =========================================
+        private void btnGuardar_Click(
+            object sender, EventArgs e)
         {
-            if (!ValidarCampos(esNuevo: true)) return;
-
-            string username = txtNombreUsuario.Text.Trim();
-            if (ExisteUsername(username))
-            {
-                MessageBox.Show("El nombre de usuario (username) ya está registrado en la plataforma.", "Username Duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtNombreUsuario.Focus();
+            if (!ValidarCampos(true))
                 return;
-            }
 
             try
             {
-                string contrasenaHash = HashPassword(txtContrasena.Text);
+                string nombre = txtNombreUsuario.Text.Trim();
 
-                using (SqlConnection conn = conexion.Conectar())
+                // HASH COMPATIBLE CON EL LOGIN
+                string hash =
+                    SeguridadPassword.CrearHash(
+                        txtContrasena.Text);
+
+                using (SqlConnection cn = conexion.Conectar())
                 {
-                    conn.Open();
-                    string query = @"INSERT INTO Usuarios 
-                                    (nombre_usuario, contrasena_hash, id_rol, estado, intentos_fallidos) 
-                                    VALUES 
-                                    (@nombre_usuario, @contrasena_hash, @id_rol, @estado, 0)";
+                    cn.Open();
 
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    if (ExisteUsername(cn, nombre, 0))
                     {
-                        cmd.Parameters.AddWithValue("@nombre_usuario", username);
-                        cmd.Parameters.AddWithValue("@contrasena_hash", contrasenaHash);
-                        cmd.Parameters.AddWithValue("@id_rol", Convert.ToInt32(cboRol.SelectedValue));
-                        cmd.Parameters.AddWithValue("@estado", cboEstado.SelectedItem.ToString());
+                        MessageBox.Show(
+                            "El nombre de usuario ya existe.");
+                        return;
+                    }
+
+                    string sql = @"
+                        INSERT INTO Usuarios
+                        (
+                            nombre_usuario,
+                            contrasena_hash,
+                            id_rol,
+                            estado,
+                            intentos_fallidos,
+                            bloqueo_hasta
+                        )
+                        VALUES
+                        (
+                            @nombre,
+                            @hash,
+                            @rol,
+                            @estado,
+                            0,
+                            NULL
+                        )";
+
+                    using (SqlCommand cmd =
+                        new SqlCommand(sql, cn))
+                    {
+                        cmd.Parameters.Add(
+                            "@nombre", SqlDbType.VarChar, 50
+                        ).Value = nombre;
+
+                        cmd.Parameters.Add(
+                            "@hash", SqlDbType.VarChar, 255
+                        ).Value = hash;
+
+                        cmd.Parameters.Add(
+                            "@rol", SqlDbType.Int
+                        ).Value =
+                            Convert.ToInt32(cboRol.SelectedValue);
+
+                        cmd.Parameters.Add(
+                            "@estado", SqlDbType.VarChar, 15
+                        ).Value =
+                            cboEstado.SelectedItem.ToString();
 
                         cmd.ExecuteNonQuery();
                     }
                 }
 
-                MessageBox.Show("Usuario registrado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LimpiarCampos();
+                MessageBox.Show(
+                    "Usuario guardado correctamente.\n" +
+                    "La contraseña se almacenó de forma segura.",
+                    "MediCitas",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
                 CargarUsuarios();
+                LimpiarCampos();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(
+                    "Error de SQL Server: " + ex.Message);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al registrar el usuario: " + ex.Message, "Error SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Error al guardar usuario: " + ex.Message);
             }
         }
 
-        private void btnModificar_Click(object sender, EventArgs e)
+        // =========================================
+        // MODIFICAR USUARIO
+        // =========================================
+        private void btnModificar_Click(
+            object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtIdUsuario.Text))
+            int id;
+
+            if (!int.TryParse(txtIdUsuario.Text, out id))
             {
-                MessageBox.Show("Seleccione un usuario de la lista para modificar.", "Selección requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Seleccione un usuario para modificar.");
                 return;
             }
 
-            if (!ValidarCampos(esNuevo: false)) return;
-
-            int idUsuario = Convert.ToInt32(txtIdUsuario.Text);
-            string username = txtNombreUsuario.Text.Trim();
-
-            if (ExisteUsername(username, idUsuario))
-            {
-                MessageBox.Show("El nombre de usuario (username) ya pertenece a otro registro.", "Username Duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtNombreUsuario.Focus();
+            if (!ValidarCampos(false))
                 return;
-            }
 
             try
             {
-                using (SqlConnection conn = conexion.Conectar())
-                {
-                    conn.Open();
+                string nombre = txtNombreUsuario.Text.Trim();
 
-                    string query;
-                    if (!string.IsNullOrWhiteSpace(txtContrasena.Text))
+                bool cambiarContrasena =
+                    !string.IsNullOrEmpty(txtContrasena.Text);
+
+                using (SqlConnection cn = conexion.Conectar())
+                {
+                    cn.Open();
+
+                    if (ExisteUsername(cn, nombre, id))
                     {
-                        // Si ingresó una nueva contraseña, actualizamos el hash y reseteamos el bloqueo por intentos fallidos
-                        query = @"UPDATE Usuarios 
-                                  SET nombre_usuario = @nombre_usuario, 
-                                      contrasena_hash = @contrasena_hash, 
-                                      id_rol = @id_rol, 
-                                      estado = @estado, 
-                                      intentos_fallidos = 0, 
-                                      bloqueo_hasta = NULL 
-                                  WHERE id_usuario = @id_usuario";
+                        MessageBox.Show(
+                            "Ya existe otro usuario con ese nombre.");
+                        return;
+                    }
+
+                    string sql;
+
+                    if (cambiarContrasena)
+                    {
+                        sql = @"
+                            UPDATE Usuarios
+                            SET
+                                nombre_usuario = @nombre,
+                                contrasena_hash = @hash,
+                                id_rol = @rol,
+                                estado = @estado,
+                                intentos_fallidos = 0,
+                                bloqueo_hasta = NULL
+                            WHERE id_usuario = @id";
                     }
                     else
                     {
-                        // Si se dejó en blanco, se conserva la contraseña anterior
-                        query = @"UPDATE Usuarios 
-                                  SET nombre_usuario = @nombre_usuario, 
-                                      id_rol = @id_rol, 
-                                      estado = @estado 
-                                  WHERE id_usuario = @id_usuario";
+                        sql = @"
+                            UPDATE Usuarios
+                            SET
+                                nombre_usuario = @nombre,
+                                id_rol = @rol,
+                                estado = @estado
+                            WHERE id_usuario = @id";
                     }
 
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlCommand cmd =
+                        new SqlCommand(sql, cn))
                     {
-                        cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
-                        cmd.Parameters.AddWithValue("@nombre_usuario", username);
-                        cmd.Parameters.AddWithValue("@id_rol", Convert.ToInt32(cboRol.SelectedValue));
-                        cmd.Parameters.AddWithValue("@estado", cboEstado.SelectedItem.ToString());
+                        cmd.Parameters.Add(
+                            "@id", SqlDbType.Int
+                        ).Value = id;
 
-                        if (!string.IsNullOrWhiteSpace(txtContrasena.Text))
+                        cmd.Parameters.Add(
+                            "@nombre", SqlDbType.VarChar, 50
+                        ).Value = nombre;
+
+                        cmd.Parameters.Add(
+                            "@rol", SqlDbType.Int
+                        ).Value =
+                            Convert.ToInt32(cboRol.SelectedValue);
+
+                        cmd.Parameters.Add(
+                            "@estado", SqlDbType.VarChar, 15
+                        ).Value =
+                            cboEstado.SelectedItem.ToString();
+
+                        if (cambiarContrasena)
                         {
-                            cmd.Parameters.AddWithValue("@contrasena_hash", HashPassword(txtContrasena.Text));
+                            string hash =
+                                SeguridadPassword.CrearHash(
+                                    txtContrasena.Text);
+
+                            cmd.Parameters.Add(
+                                "@hash", SqlDbType.VarChar, 255
+                            ).Value = hash;
                         }
+
+                        int filas = cmd.ExecuteNonQuery();
+
+                        if (filas == 0)
+                        {
+                            MessageBox.Show(
+                                "El usuario ya no existe.");
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Usuario modificado correctamente.",
+                    "MediCitas",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                CargarUsuarios();
+                LimpiarCampos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Error al modificar usuario: " + ex.Message);
+            }
+        }
+
+        // =========================================
+        // INACTIVAR USUARIO
+        // =========================================
+        private void btnInactivar_Click(
+            object sender, EventArgs e)
+        {
+            int id;
+
+            if (!int.TryParse(txtIdUsuario.Text, out id))
+            {
+                MessageBox.Show(
+                    "Seleccione un usuario.");
+                return;
+            }
+
+            DialogResult respuesta = MessageBox.Show(
+                "¿Está seguro de inactivar esta cuenta?",
+                "Confirmar",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (respuesta != DialogResult.Yes)
+                return;
+
+            try
+            {
+                using (SqlConnection cn = conexion.Conectar())
+                {
+                    cn.Open();
+
+                    string sql = @"
+                        UPDATE Usuarios
+                        SET estado = 'Inactivo'
+                        WHERE id_usuario = @id";
+
+                    using (SqlCommand cmd =
+                        new SqlCommand(sql, cn))
+                    {
+                        cmd.Parameters.Add(
+                            "@id", SqlDbType.Int
+                        ).Value = id;
 
                         cmd.ExecuteNonQuery();
                     }
                 }
 
-                MessageBox.Show("Cuenta de usuario actualizada exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LimpiarCampos();
+                MessageBox.Show(
+                    "Usuario inactivado correctamente.");
+
                 CargarUsuarios();
+                LimpiarCampos();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al actualizar la cuenta de usuario: " + ex.Message, "Error SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Error al inactivar: " + ex.Message);
             }
         }
 
-        private void btnInactivar_Click(object sender, EventArgs e)
+        // =========================================
+        // BUSCAR
+        // =========================================
+        private void btnBuscar_Click(
+            object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtIdUsuario.Text))
-            {
-                MessageBox.Show("Seleccione un usuario de la lista para inactivar.", "Selección requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            int idUsuario = Convert.ToInt32(txtIdUsuario.Text);
-            string username = txtNombreUsuario.Text;
-
-            DialogResult confirmacion = MessageBox.Show(
-                $"¿Está seguro de inactivar la cuenta de usuario '{username}'?",
-                "Confirmar Inactivación",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
-
-            if (confirmacion == DialogResult.Yes)
-            {
-                try
-                {
-                    using (SqlConnection conn = conexion.Conectar())
-                    {
-                        conn.Open();
-                        string query = "UPDATE Usuarios SET estado = 'Inactivo' WHERE id_usuario = @id_usuario";
-                        using (SqlCommand cmd = new SqlCommand(query, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@id_usuario", idUsuario);
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-
-                    MessageBox.Show("La cuenta de usuario ha sido marcada como Inactiva.", "Registro Inactivado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LimpiarCampos();
-                    CargarUsuarios();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al inactivar el usuario: " + ex.Message, "Error SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            CargarUsuarios(txtBuscar.Text.Trim());
         }
 
-        private void btnLimpiar_Click(object sender, EventArgs e)
-        {
-            LimpiarCampos();
-        }
-
-        private void btnBuscar_Click(object sender, EventArgs e)
-        {
-            CargarUsuarios(txtBuscar.Text);
-        }
-
-        private void btnRefrescar_Click(object sender, EventArgs e)
+        // =========================================
+        // REFRESCAR
+        // =========================================
+        private void btnRefrescar_Click(
+            object sender, EventArgs e)
         {
             txtBuscar.Clear();
             CargarUsuarios();
         }
 
-        #endregion
-
-        #region Eventos de Selección de Tabla
-
-        private void dgvUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)
+        // =========================================
+        // LIMPIAR
+        // =========================================
+        private void btnLimpiar_Click(
+            object sender, EventArgs e)
         {
-            if (e.RowIndex >= 0)
-            {
-                DataGridViewRow fila = dgvUsuarios.Rows[e.RowIndex];
-
-                txtIdUsuario.Text = fila.Cells["Código"].Value.ToString();
-                txtNombreUsuario.Text = fila.Cells["Nombre de Usuario"].Value.ToString();
-                txtContrasena.Clear(); // No se muestra el hash de la clave por seguridad
-
-                if (fila.Cells["IdRol"].Value != DBNull.Value)
-                {
-                    cboRol.SelectedValue = Convert.ToInt32(fila.Cells["IdRol"].Value);
-                }
-
-                cboEstado.SelectedItem = fila.Cells["Estado"].Value.ToString();
-
-                btnGuardar.Enabled = false;
-                btnModificar.Enabled = true;
-                btnInactivar.Enabled = true;
-            }
+            LimpiarCampos();
         }
 
-        #endregion
+        // =========================================
+        // SELECCIONAR USUARIO
+        // =========================================
+        private void dgvUsuarios_CellClick(
+            object sender,
+            DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
+
+            DataGridViewRow fila =
+                dgvUsuarios.Rows[e.RowIndex];
+
+            if (fila.IsNewRow)
+                return;
+
+            txtIdUsuario.Text =
+                Convert.ToString(
+                    fila.Cells["Código"].Value);
+
+            txtNombreUsuario.Text =
+                Convert.ToString(
+                    fila.Cells["Nombre de Usuario"].Value);
+
+            // POR SEGURIDAD NO SE MUESTRA EL HASH
+            txtContrasena.Clear();
+
+            if (fila.Cells["IdRol"].Value != DBNull.Value)
+            {
+                cboRol.SelectedValue =
+                    Convert.ToInt32(
+                        fila.Cells["IdRol"].Value);
+            }
+
+            string estado = Convert.ToString(
+                fila.Cells["Estado"].Value);
+
+            if (cboEstado.Items.Contains(estado))
+                cboEstado.SelectedItem = estado;
+            else
+                cboEstado.SelectedIndex = 0;
+
+            btnGuardar.Enabled = false;
+            btnModificar.Enabled = true;
+            btnInactivar.Enabled = true;
+        }
+
+        // Evento que puede existir en el diseñador anterior
+        private void dgvUsuarios_CellContentClick(
+            object sender,
+            DataGridViewCellEventArgs e)
+        {
+            // No requiere acciones adicionales.
+        }
     }
 }

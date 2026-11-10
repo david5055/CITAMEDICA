@@ -12,7 +12,7 @@ namespace medicitass
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Iniciar con la sesión de Administrador para habilitar todas las opciones
-            Application.Run(new FrmMenuPrincipal("AdminUser", "Administrador"));
+            Application.Run(new FrmLogin());
         }
     }
 }
