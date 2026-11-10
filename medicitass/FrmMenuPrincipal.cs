@@ -436,5 +436,10 @@ namespace medicitass
                 formularioLogin.Show();
             }
         }
+
+        private void FrmMenuPrincipal_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
