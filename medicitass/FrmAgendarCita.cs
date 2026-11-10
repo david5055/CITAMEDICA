@@ -2,7 +2,6 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Windows.Forms;
 
 namespace medicitass
@@ -11,19 +10,36 @@ namespace medicitass
     {
         private readonly Conexion conexion = new Conexion();
         private readonly string usuarioActual;
-
         private int idUsuarioActual = 0;
 
-        // Constructor para el diseñador.
         public FrmAgendarCita() : this("")
         {
         }
 
-        // Constructor utilizado desde FrmMenuPrincipal.
         public FrmAgendarCita(string usuario)
         {
             InitializeComponent();
-            usuarioActual = usuario ?? "";
+            usuarioActual = (usuario ?? "").Trim();
+        }
+
+        private class BloqueHorario
+        {
+            public TimeSpan Inicio { get; set; }
+            public TimeSpan Fin { get; set; }
+
+            public BloqueHorario(TimeSpan inicio, TimeSpan fin)
+            {
+                Inicio = inicio;
+                Fin = fin;
+            }
+
+            public override string ToString()
+            {
+                return DateTime.Today.Add(Inicio)
+                    .ToString("hh:mm tt") + " - " +
+                    DateTime.Today.Add(Fin)
+                    .ToString("hh:mm tt");
+            }
         }
 
         private void FrmAgendarCita_Load(
@@ -31,40 +47,37 @@ namespace medicitass
         {
             dtpFecha.MinDate = DateTime.Today;
             dtpFecha.Value = DateTime.Today;
-
-            cboPaciente.SelectedIndex = -1;
-            cboEspecialidad.SelectedIndex = -1;
-            cboDoctor.SelectedIndex = -1;
-            cboHorario.SelectedIndex = -1;
-
             btnGuardar.Enabled = false;
-
-            if (string.IsNullOrWhiteSpace(usuarioActual))
-            {
-                lblEstado.Text =
-                    "Abra este formulario desde una sesión válida.";
-                return;
-            }
 
             try
             {
                 using (SqlConnection cn = conexion.Conectar())
                 {
                     cn.Open();
+                    idUsuarioActual = BuscarUsuarioAutorizado(cn);
+                }
 
-                    if (!ValidarUsuario(cn))
-                    {
-                        lblEstado.Text =
-                            "Usuario inactivo o sin permiso para agendar.";
-                        return;
-                    }
+                if (idUsuarioActual == 0)
+                {
+                    lblEstado.Text =
+                        "Sesión no identificada. Abra Agendar cita " +
+                        "desde el Menú Principal con una cuenta válida.";
+
+                    MessageBox.Show(
+                        "No se identificó la cuenta que está " +
+                        "agendando la cita.",
+                        "MediCitas",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
                 }
 
                 CargarPacientes();
                 CargarEspecialidades();
+                LimpiarHorarios();
 
                 lblEstado.Text =
-                    "Seleccione paciente, especialidad, doctor y fecha.";
+                    "Seleccione un paciente, doctor y fecha.";
             }
             catch (Exception ex)
             {
@@ -72,19 +85,16 @@ namespace medicitass
             }
         }
 
-        // ========================================
-        // VALIDAR USUARIO AUTENTICADO
-        // ========================================
-        private bool ValidarUsuario(SqlConnection cn)
+        private int BuscarUsuarioAutorizado(SqlConnection cn)
         {
-            idUsuarioActual = 0;
+            if (string.IsNullOrWhiteSpace(usuarioActual))
+                return 0;
 
             string sql = @"
-                SELECT
-                    u.id_usuario
+                SELECT u.id_usuario
                 FROM dbo.Usuarios u
                 INNER JOIN dbo.Roles r
-                    ON u.id_rol = r.id_rol
+                  ON r.id_rol = u.id_rol
                 WHERE u.nombre_usuario = @Usuario
                   AND u.estado = 'Activo'
                   AND r.nombre_rol IN
@@ -99,42 +109,33 @@ namespace medicitass
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
                     if (!dr.Read())
-                        return false;
+                        return 0;
 
-                    int id = Convert.ToInt32(
-                        dr["id_usuario"]);
+                    int id = Convert.ToInt32(dr["id_usuario"]);
 
-                    // Rechazar cuentas duplicadas.
                     if (dr.Read())
-                        return false;
+                        return 0;
 
-                    idUsuarioActual = id;
-                    return true;
+                    return id;
                 }
             }
         }
 
-        // ========================================
-        // CARGAR PACIENTES
-        // ========================================
         private void CargarPacientes()
         {
             string sql = @"
-                SELECT
-                    id_paciente,
+                SELECT id_paciente,
                     nombres + ' ' + apellidos +
-                    ' - DUI: ' + dui AS descripcion
+                    ' - DUI: ' + dui AS Descripcion
                 FROM dbo.Pacientes
                 WHERE estado = 'Activo'
                 ORDER BY nombres, apellidos";
 
-            CargarCombo(cboPaciente, sql,
-                "descripcion", "id_paciente");
+            CargarCombo(
+                cboPaciente, sql,
+                "Descripcion", "id_paciente");
         }
 
-        // ========================================
-        // CARGAR ESPECIALIDADES
-        // ========================================
         private void CargarEspecialidades()
         {
             string sql = @"
@@ -143,78 +144,82 @@ namespace medicitass
                 WHERE estado = 'Activo'
                 ORDER BY nombre";
 
-            CargarCombo(cboEspecialidad, sql,
+            CargarCombo(
+                cboEspecialidad, sql,
                 "nombre", "id_especialidad");
         }
 
         private void CargarCombo(
             ComboBox combo,
             string sql,
-            string displayMember,
-            string valueMember,
-            int? parametro = null)
+            string display,
+            string value,
+            int? especialidad = null)
         {
             using (SqlConnection cn = conexion.Conectar())
             using (SqlCommand cmd = new SqlCommand(sql, cn))
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
             {
-                if (parametro.HasValue)
+                if (especialidad.HasValue)
                 {
                     cmd.Parameters.Add(
                         "@Especialidad", SqlDbType.Int
-                    ).Value = parametro.Value;
+                    ).Value = especialidad.Value;
                 }
 
-                using (SqlDataAdapter da =
-                    new SqlDataAdapter(cmd))
-                {
-                    DataTable tabla = new DataTable();
-                    da.Fill(tabla);
+                DataTable tabla = new DataTable();
+                da.Fill(tabla);
 
-                    combo.DisplayMember = displayMember;
-                    combo.ValueMember = valueMember;
-                    combo.DataSource = tabla;
-                    combo.SelectedIndex = -1;
-                }
+                combo.DisplayMember = display;
+                combo.ValueMember = value;
+                combo.DataSource = tabla;
+                combo.SelectedIndex = -1;
             }
         }
 
-        // ========================================
-        // ESPECIALIDAD SELECCIONADA
-        // ========================================
+        private bool ObtenerIdSeleccionado(
+            ComboBox combo, out int id)
+        {
+            id = 0;
+
+            if (combo.SelectedIndex < 0)
+                return false;
+
+            if (combo.SelectedValue == null ||
+                combo.SelectedValue is DataRowView)
+                return false;
+
+            return int.TryParse(
+                combo.SelectedValue.ToString(), out id);
+        }
+
         private void cboEspecialidad_SelectedIndexChanged(
             object sender, EventArgs e)
         {
             cboDoctor.DataSource = null;
-            cboHorario.DataSource = null;
-            btnGuardar.Enabled = false;
+            LimpiarHorarios();
+            dgvCitas.Rows.Clear();
 
-            if (cboEspecialidad.SelectedIndex < 0)
-                return;
+            int idEspecialidad;
 
-            if (!(cboEspecialidad.SelectedValue is int))
+            if (!ObtenerIdSeleccionado(
+                cboEspecialidad, out idEspecialidad))
                 return;
 
             try
             {
-                int idEspecialidad =
-                    Convert.ToInt32(
-                        cboEspecialidad.SelectedValue);
-
                 string sql = @"
-                    SELECT
-                        id_doctor,
-                        'Dr(a). ' + nombres + ' ' + apellidos
-                            AS descripcion
+                    SELECT id_doctor,
+                        'Dr(a). ' + nombres + ' ' +
+                        apellidos AS Descripcion
                     FROM dbo.Doctores
                     WHERE id_especialidad = @Especialidad
                       AND estado = 'Activo'
                     ORDER BY nombres, apellidos";
 
                 CargarCombo(
-                    cboDoctor,
-                    sql,
-                    "descripcion",
-                    "id_doctor",
+                    cboDoctor, sql,
+                    "Descripcion", "id_doctor",
                     idEspecialidad);
             }
             catch (Exception ex)
@@ -223,9 +228,6 @@ namespace medicitass
             }
         }
 
-        // ========================================
-        // CAMBIOS DE DOCTOR Y FECHA
-        // ========================================
         private void cboDoctor_SelectedIndexChanged(
             object sender, EventArgs e)
         {
@@ -248,39 +250,20 @@ namespace medicitass
             btnGuardar.Enabled = false;
         }
 
-        // ========================================
-        // OBTENER DÍA EN ESPAÑOL
-        // ========================================
         private string ObtenerDia(DateTime fecha)
         {
             switch (fecha.DayOfWeek)
             {
-                case DayOfWeek.Monday:
-                    return "Lunes";
-
-                case DayOfWeek.Tuesday:
-                    return "Martes";
-
-                case DayOfWeek.Wednesday:
-                    return "Miercoles";
-
-                case DayOfWeek.Thursday:
-                    return "Jueves";
-
-                case DayOfWeek.Friday:
-                    return "Viernes";
-
-                case DayOfWeek.Saturday:
-                    return "Sabado";
-
-                default:
-                    return "Domingo";
+                case DayOfWeek.Monday: return "Lunes";
+                case DayOfWeek.Tuesday: return "Martes";
+                case DayOfWeek.Wednesday: return "Miercoles";
+                case DayOfWeek.Thursday: return "Jueves";
+                case DayOfWeek.Friday: return "Viernes";
+                case DayOfWeek.Saturday: return "Sabado";
+                default: return "Domingo";
             }
         }
 
-        // ========================================
-        // BUSCAR HORARIOS LIBRES
-        // ========================================
         private void btnBuscarHorarios_Click(
             object sender, EventArgs e)
         {
@@ -291,30 +274,24 @@ namespace medicitass
         {
             LimpiarHorarios();
 
+            int idDoctor;
+
             if (idUsuarioActual <= 0)
             {
                 MessageBox.Show(
-                    "Debe iniciar sesión como Administrador " +
-                    "o Recepcionista.",
-                    "MediCitas",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                    "La sesión no está identificada.",
+                    "MediCitas");
                 return;
             }
 
-            if (cboDoctor.SelectedIndex < 0 ||
-                !(cboDoctor.SelectedValue is int))
+            if (!ObtenerIdSeleccionado(
+                cboDoctor, out idDoctor))
             {
                 MessageBox.Show(
-                    "Seleccione un doctor.",
-                    "MediCitas",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                    "Seleccione primero un doctor.",
+                    "MediCitas");
                 return;
             }
-
-            int idDoctor =
-                Convert.ToInt32(cboDoctor.SelectedValue);
 
             DateTime fecha = dtpFecha.Value.Date;
             string dia = ObtenerDia(fecha);
@@ -325,30 +302,25 @@ namespace medicitass
                 {
                     cn.Open();
 
-                    string sql = @"
-                        SELECT
-                            hora_inicio,
-                            hora_fin
-                        FROM dbo.Horarios_Doctor
-                        WHERE id_doctor = @Doctor
-                          AND estado = 'Activo'
-                          AND (
-                              UPPER(
-                                  REPLACE(
-                                      REPLACE(
-                                          REPLACE(
-                                              dia_semana,
-                                              'é', 'e'),
-                                          'á', 'a'),
-                                      ' ', '')
-                              ) = UPPER(@Dia)
-                          )
-                        ORDER BY hora_inicio";
-
+                    // Leer las jornadas registradas.
                     DataTable jornadas = new DataTable();
 
+                    string sqlJornadas = @"
+                        SELECT h.hora_inicio, h.hora_fin
+                        FROM dbo.Horarios_Doctor h
+                        INNER JOIN dbo.Doctores d
+                            ON d.id_doctor = h.id_doctor
+                        WHERE h.id_doctor = @Doctor
+                          AND h.estado = 'Activo'
+                          AND d.estado = 'Activo'
+                          AND h.dia_semana COLLATE
+                              Latin1_General_100_CI_AI
+                              = @Dia COLLATE
+                              Latin1_General_100_CI_AI
+                        ORDER BY h.hora_inicio";
+
                     using (SqlCommand cmd =
-                        new SqlCommand(sql, cn))
+                        new SqlCommand(sqlJornadas, cn))
                     {
                         cmd.Parameters.Add(
                             "@Doctor", SqlDbType.Int
@@ -368,18 +340,15 @@ namespace medicitass
                     if (jornadas.Rows.Count == 0)
                     {
                         MessageBox.Show(
-                            "El doctor no tiene una jornada activa " +
-                            "para el día " + dia + ".",
-                            "Sin horario laboral",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
+                            "El médico no tiene una jornada " +
+                            "activa para " + dia + ".",
+                            "Sin jornada");
                         return;
                     }
 
-                    // Obtener citas que ya ocupan horario.
                     DataTable ocupadas = new DataTable();
 
-                    string citasSql = @"
+                    string sqlOcupadas = @"
                         SELECT hora_inicio, hora_fin
                         FROM dbo.Citas
                         WHERE id_doctor = @Doctor
@@ -387,7 +356,7 @@ namespace medicitass
                           AND estado = 'Programada'";
 
                     using (SqlCommand cmd =
-                        new SqlCommand(citasSql, cn))
+                        new SqlCommand(sqlOcupadas, cn))
                     {
                         cmd.Parameters.Add(
                             "@Doctor", SqlDbType.Int
@@ -404,81 +373,69 @@ namespace medicitass
                         }
                     }
 
-                    DateTime ahora = DateTime.Now;
-                    int encontrados = 0;
-
                     foreach (DataRow jornada in jornadas.Rows)
                     {
-                        TimeSpan inicio =
+                        TimeSpan hora =
                             (TimeSpan)jornada["hora_inicio"];
 
-                        TimeSpan fin =
+                        TimeSpan finJornada =
                             (TimeSpan)jornada["hora_fin"];
 
-                        // Bloques de 30 minutos.
-                        while (inicio.Add(
-                            TimeSpan.FromMinutes(30)) <= fin)
+                        while (hora.Add(
+                            TimeSpan.FromMinutes(30)) <= finJornada)
                         {
-                            TimeSpan finBloque =
-                                inicio.Add(
-                                    TimeSpan.FromMinutes(30));
+                            TimeSpan fin = hora.Add(
+                                TimeSpan.FromMinutes(30));
 
-                            DateTime inicioReal =
-                                fecha.Add(inicio);
-
-                            bool esFuturo =
-                                inicioReal > ahora;
+                            bool futuro =
+                                fecha.Add(hora) > DateTime.Now;
 
                             bool ocupado = false;
 
                             foreach (DataRow cita in ocupadas.Rows)
                             {
-                                TimeSpan horaCitaInicio =
+                                TimeSpan iniCita =
                                     (TimeSpan)cita["hora_inicio"];
 
-                                TimeSpan horaCitaFin =
+                                TimeSpan finCita =
                                     (TimeSpan)cita["hora_fin"];
 
-                                if (inicio < horaCitaFin &&
-                                    finBloque > horaCitaInicio)
+                                if (hora < finCita &&
+                                    fin > iniCita)
                                 {
                                     ocupado = true;
                                     break;
                                 }
                             }
 
-                            if (esFuturo && !ocupado)
+                            if (futuro && !ocupado)
                             {
                                 cboHorario.Items.Add(
-                                    new BloqueHorario(
-                                        inicio, finBloque));
-
-                                encontrados++;
+                                    new BloqueHorario(hora, fin));
                             }
 
-                            inicio = finBloque;
+                            hora = fin;
                         }
                     }
 
-                    if (encontrados == 0)
+                    if (cboHorario.Items.Count == 0)
                     {
+                        lblEstado.Text =
+                            "No hay bloques disponibles.";
+
                         MessageBox.Show(
-                            "No hay bloques disponibles para " +
-                            "la fecha seleccionada.\n\n" +
-                            "Si es hoy, puede que todos los " +
-                            "horarios de atención ya hayan pasado.",
-                            "Sin disponibilidad",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
+                            "No hay horarios libres para " +
+                            "la fecha seleccionada.",
+                            "Sin disponibilidad");
                     }
                     else
                     {
-                        lblEstado.Text =
-                            encontrados +
-                            " bloques de horario disponibles.";
-
                         cboHorario.SelectedIndex = 0;
                         btnGuardar.Enabled = true;
+
+                        lblEstado.Text =
+                            cboHorario.Items.Count +
+                            " horarios disponibles.";
                     }
                 }
             }
@@ -488,38 +445,6 @@ namespace medicitass
             }
         }
 
-        // ========================================
-        // CLASE DE BLOQUE HORARIO
-        // ========================================
-        private class BloqueHorario
-        {
-            public TimeSpan Inicio { get; private set; }
-            public TimeSpan Fin { get; private set; }
-
-            public BloqueHorario(
-                TimeSpan inicio, TimeSpan fin)
-            {
-                Inicio = inicio;
-                Fin = fin;
-            }
-
-            public override string ToString()
-            {
-                string desde =
-                    DateTime.Today.Add(Inicio)
-                        .ToString("hh:mm tt");
-
-                string hasta =
-                    DateTime.Today.Add(Fin)
-                        .ToString("hh:mm tt");
-
-                return desde + " - " + hasta;
-            }
-        }
-
-        // ========================================
-        // MOSTRAR CITAS DE LA FECHA
-        // ========================================
         private void CargarCitasDeFecha()
         {
             if (dgvCitas == null)
@@ -527,8 +452,10 @@ namespace medicitass
 
             dgvCitas.Rows.Clear();
 
-            if (cboDoctor.SelectedIndex < 0 ||
-                !(cboDoctor.SelectedValue is int))
+            int idDoctor;
+
+            if (!ObtenerIdSeleccionado(
+                cboDoctor, out idDoctor))
                 return;
 
             try
@@ -549,8 +476,8 @@ namespace medicitass
                         ON c.id_paciente = p.id_paciente
                     INNER JOIN dbo.Doctores d
                         ON c.id_doctor = d.id_doctor
-                    WHERE c.fecha = @Fecha
-                      AND c.id_doctor = @Doctor
+                    WHERE c.id_doctor = @Doctor
+                      AND c.fecha = @Fecha
                       AND c.estado = 'Programada'
                     ORDER BY c.hora_inicio";
 
@@ -558,13 +485,12 @@ namespace medicitass
                 using (SqlCommand cmd = new SqlCommand(sql, cn))
                 {
                     cmd.Parameters.Add(
-                        "@Fecha", SqlDbType.Date
-                    ).Value = dtpFecha.Value.Date;
+                        "@Doctor", SqlDbType.Int
+                    ).Value = idDoctor;
 
                     cmd.Parameters.Add(
-                        "@Doctor", SqlDbType.Int
-                    ).Value =
-                        Convert.ToInt32(cboDoctor.SelectedValue);
+                        "@Fecha", SqlDbType.Date
+                    ).Value = dtpFecha.Value.Date;
 
                     cn.Open();
 
@@ -573,74 +499,69 @@ namespace medicitass
                     {
                         while (dr.Read())
                         {
-                            TimeSpan inicio =
+                            TimeSpan ini =
                                 (TimeSpan)dr["hora_inicio"];
 
                             TimeSpan fin =
                                 (TimeSpan)dr["hora_fin"];
 
                             string horario =
-                                DateTime.Today.Add(inicio)
-                                .ToString("hh:mm tt") +
+                                DateTime.Today.Add(ini)
+                                    .ToString("hh:mm tt") +
                                 " - " +
                                 DateTime.Today.Add(fin)
-                                .ToString("hh:mm tt");
+                                    .ToString("hh:mm tt");
 
                             dgvCitas.Rows.Add(
                                 dr["id_cita"],
                                 horario,
                                 dr["Paciente"],
                                 dr["Doctor"],
-                                dr["Motivo"]
-                            );
+                                dr["Motivo"]);
                         }
                     }
                 }
+
+                dgvCitas.ClearSelection();
             }
             catch (Exception ex)
             {
                 lblEstado.Text =
-                    "No se pudo cargar la agenda.";
-
-                MostrarError(ex);
+                    "No se pudieron cargar las citas: " +
+                    ex.GetBaseException().Message;
             }
         }
 
-        // ========================================
+        // =========================================
         // GUARDAR CITA
-        // ========================================
+        // =========================================
         private void btnGuardar_Click(
             object sender, EventArgs e)
         {
-            if (idUsuarioActual <= 0 ||
-                cboPaciente.SelectedIndex < 0 ||
-                cboDoctor.SelectedIndex < 0 ||
+            int paciente;
+            int doctor;
+
+            if (idUsuarioActual == 0 ||
+                !ObtenerIdSeleccionado(
+                    cboPaciente, out paciente) ||
+                !ObtenerIdSeleccionado(
+                    cboDoctor, out doctor) ||
                 !(cboHorario.SelectedItem is BloqueHorario))
             {
                 MessageBox.Show(
-                    "Complete paciente, doctor y horario.",
-                    "Datos incompletos",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                    "Seleccione paciente, doctor y " +
+                    "un horario disponible.",
+                    "Datos incompletos");
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(txtMotivo.Text))
             {
                 MessageBox.Show(
-                    "Ingrese el motivo de la consulta.",
-                    "MediCitas",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                txtMotivo.Focus();
+                    "Ingrese el motivo de consulta.",
+                    "MediCitas");
                 return;
             }
-
-            int idPaciente =
-                Convert.ToInt32(cboPaciente.SelectedValue);
-
-            int idDoctor =
-                Convert.ToInt32(cboDoctor.SelectedValue);
 
             BloqueHorario bloque =
                 (BloqueHorario)cboHorario.SelectedItem;
@@ -650,23 +571,19 @@ namespace medicitass
             if (fecha.Add(bloque.Inicio) <= DateTime.Now)
             {
                 MessageBox.Show(
-                    "No se pueden agendar citas " +
-                    "en horarios que ya pasaron.",
-                    "Horario inválido",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                    "La hora de la cita ya pasó.",
+                    "MediCitas");
                 return;
             }
 
-            DialogResult confirmar = MessageBox.Show(
-                "¿Desea agendar esta cita?\n\n" +
-                "Fecha: " + fecha.ToString("dd/MM/yyyy") +
-                "\nHorario: " + bloque.ToString(),
+            if (MessageBox.Show(
+                "¿Desea guardar esta cita?\n" +
+                fecha.ToString("dd/MM/yyyy") + "\n" +
+                bloque.ToString(),
                 "Confirmar cita",
                 MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            if (confirmar != DialogResult.Yes)
+                MessageBoxIcon.Question)
+                != DialogResult.Yes)
                 return;
 
             btnGuardar.Enabled = false;
@@ -674,16 +591,13 @@ namespace medicitass
             try
             {
                 int idCita = GuardarCita(
-                    idPaciente,
-                    idDoctor,
-                    fecha,
-                    bloque.Inicio,
-                    bloque.Fin,
+                    paciente, doctor, fecha,
+                    bloque.Inicio, bloque.Fin,
                     txtMotivo.Text.Trim());
 
                 MessageBox.Show(
-                    "Cita agendada correctamente.\n" +
-                    "Número de cita: " + idCita,
+                    "Cita guardada correctamente.\n" +
+                    "Código de cita: " + idCita,
                     "MediCitas",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -695,13 +609,15 @@ namespace medicitass
             catch (Exception ex)
             {
                 MostrarError(ex);
-                BuscarHorariosLibres();
+                CargarCitasDeFecha();
+            }
+            finally
+            {
+                if (cboHorario.Items.Count > 0)
+                    btnGuardar.Enabled = true;
             }
         }
 
-        // ========================================
-        // TRANSACCIÓN PARA GUARDAR
-        // ========================================
         private int GuardarCita(
             int paciente,
             int doctor,
@@ -720,17 +636,17 @@ namespace medicitass
                 {
                     try
                     {
-                        // Revalidar el usuario.
+                        // Validar la sesión otra vez.
                         string permiso = @"
                             SELECT COUNT(*)
                             FROM dbo.Usuarios u
                             INNER JOIN dbo.Roles r
-                                ON u.id_rol = r.id_rol
+                                ON r.id_rol = u.id_rol
                             WHERE u.id_usuario = @IdUsuario
-                              AND u.nombre_usuario = @Usuario
+                              AND u.nombre_usuario = @Nombre
                               AND u.estado = 'Activo'
                               AND r.nombre_rol IN
-                                  ('Administrador','Recepcionista')";
+                                ('Administrador', 'Recepcionista')";
 
                         using (SqlCommand cmd =
                             new SqlCommand(permiso, cn, tx))
@@ -740,78 +656,73 @@ namespace medicitass
                             ).Value = idUsuarioActual;
 
                             cmd.Parameters.Add(
-                                "@Usuario",
-                                SqlDbType.VarChar, 50
+                                "@Nombre", SqlDbType.VarChar, 50
                             ).Value = usuarioActual;
 
                             if (Convert.ToInt32(
                                 cmd.ExecuteScalar()) != 1)
                             {
                                 throw new Exception(
-                                    "La cuenta no tiene permiso para agendar.");
+                                    "La cuenta no tiene permiso " +
+                                    "para agendar citas.");
                             }
                         }
 
-                        // Bloqueo transaccional por doctor y fecha.
+                        // Bloquear temporalmente este doctor
+                        // y fecha para evitar doble reserva.
                         string recurso =
-                            "MediCitas_Doctor_" + doctor + "_" +
+                            "MediCitas_" + doctor + "_" +
                             fecha.ToString("yyyyMMdd");
 
-                        int resultadoBloqueo;
-
-                        using (SqlCommand cmd = new SqlCommand(
-                            @"DECLARE @Resultado INT;
-                              EXEC @Resultado = sys.sp_getapplock
-                                @Resource = @Recurso,
-                                @LockMode = 'Exclusive',
-                                @LockOwner = 'Transaction',
-                                @LockTimeout = 10000;
-                              SELECT @Resultado;", cn, tx))
+                        using (SqlCommand cmd =
+                            new SqlCommand(@"
+                                DECLARE @resultado INT;
+                                EXEC @resultado = sp_getapplock
+                                    @Resource = @Recurso,
+                                    @LockMode = 'Exclusive',
+                                    @LockOwner = 'Transaction',
+                                    @LockTimeout = 10000;
+                                SELECT @resultado;",
+                                cn, tx))
                         {
                             cmd.Parameters.Add(
-                                "@Recurso", SqlDbType.VarChar, 255
+                                "@Recurso",
+                                SqlDbType.VarChar, 255
                             ).Value = recurso;
 
-                            resultadoBloqueo = Convert.ToInt32(
-                                cmd.ExecuteScalar());
+                            if (Convert.ToInt32(
+                                cmd.ExecuteScalar()) < 0)
+                            {
+                                throw new Exception(
+                                    "No se pudo reservar " +
+                                    "el horario.");
+                            }
                         }
 
-                        if (resultadoBloqueo < 0)
-                        {
-                            throw new Exception(
-                                "No fue posible reservar el horario.");
-                        }
-
+                        // Validar fecha/hora y jornada.
                         if (fecha.Add(inicio) <= DateTime.Now)
                         {
                             throw new Exception(
-                                "El horario seleccionado ya pasó.");
+                                "El horario ya pasó.");
                         }
 
-                        // Verificar que el doctor trabaje en
-                        // ese día y horario.
-                        string verificarJornada = @"
+                        string jornada = @"
                             SELECT COUNT(*)
                             FROM dbo.Horarios_Doctor h
                             INNER JOIN dbo.Doctores d
-                                ON h.id_doctor = d.id_doctor
+                                ON d.id_doctor = h.id_doctor
                             WHERE h.id_doctor = @Doctor
                               AND h.estado = 'Activo'
                               AND d.estado = 'Activo'
-                              AND UPPER(
-                                REPLACE(
-                                    REPLACE(
-                                        REPLACE(h.dia_semana,
-                                            'é','e'),
-                                        'á','a'),
-                                    ' ','')
-                              ) = UPPER(@Dia)
+                              AND h.dia_semana COLLATE
+                                  Latin1_General_100_CI_AI
+                                  = @Dia COLLATE
+                                  Latin1_General_100_CI_AI
                               AND h.hora_inicio <= @Inicio
                               AND h.hora_fin >= @Fin";
 
                         using (SqlCommand cmd =
-                            new SqlCommand(
-                                verificarJornada, cn, tx))
+                            new SqlCommand(jornada, cn, tx))
                         {
                             cmd.Parameters.Add(
                                 "@Doctor", SqlDbType.Int
@@ -833,15 +744,16 @@ namespace medicitass
                                 cmd.ExecuteScalar()) == 0)
                             {
                                 throw new Exception(
-                                    "El doctor no atiende " +
-                                    "en ese día u horario.");
+                                    "El doctor no atiende en " +
+                                    "el horario seleccionado.");
                             }
                         }
 
-                        // Verificar solapamientos.
-                        string verificar = @"
+                        // Verificar que el bloque siga libre.
+                        string ocupacion = @"
                             SELECT COUNT(*)
-                            FROM dbo.Citas WITH (UPDLOCK, HOLDLOCK)
+                            FROM dbo.Citas WITH
+                                (UPDLOCK, HOLDLOCK)
                             WHERE id_doctor = @Doctor
                               AND fecha = @Fecha
                               AND estado = 'Programada'
@@ -849,7 +761,7 @@ namespace medicitass
                               AND @Fin > hora_inicio";
 
                         using (SqlCommand cmd =
-                            new SqlCommand(verificar, cn, tx))
+                            new SqlCommand(ocupacion, cn, tx))
                         {
                             cmd.Parameters.Add(
                                 "@Doctor", SqlDbType.Int
@@ -871,11 +783,11 @@ namespace medicitass
                                 cmd.ExecuteScalar()) > 0)
                             {
                                 throw new Exception(
-                                    "Ese bloque ya fue reservado.");
+                                    "Ese horario ya está ocupado.");
                             }
                         }
 
-                        // Insertar cita.
+                        // Insertar la cita.
                         string insertar = @"
                             INSERT INTO dbo.Citas
                             (
@@ -905,7 +817,7 @@ namespace medicitass
                             );
                             SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
-                        int nuevaCita;
+                        int idCita;
 
                         using (SqlCommand cmd =
                             new SqlCommand(insertar, cn, tx))
@@ -938,77 +850,98 @@ namespace medicitass
                                 "@Usuario", SqlDbType.Int
                             ).Value = idUsuarioActual;
 
-                            nuevaCita = Convert.ToInt32(
+                            idCita = Convert.ToInt32(
                                 cmd.ExecuteScalar());
                         }
 
-                        // Guardar historial.
-                        string historial = @"
-                            INSERT INTO dbo.Historial_Citas
-                            (
-                                id_cita,
-                                accion,
-                                fecha_anterior,
-                                hora_anterior,
-                                fecha_nueva,
-                                hora_nueva,
-                                id_usuario,
-                                fecha_movimiento
-                            )
-                            VALUES
-                            (
-                                @Cita,
-                                'Creada',
-                                NULL,
-                                NULL,
-                                @Fecha,
-                                @Hora,
-                                @Usuario,
-                                SYSDATETIME()
-                            )";
-
-                        using (SqlCommand cmd =
-                            new SqlCommand(historial, cn, tx))
+                        // Registro del movimiento.
+                        // Si tu base ya registra creaciones
+                        // con un trigger de historial, este
+                        // INSERT manual debe omitirse.
+                        if (!ExisteTriggerHistorialCreacion(cn, tx))
                         {
-                            cmd.Parameters.Add(
-                                "@Cita", SqlDbType.Int
-                            ).Value = nuevaCita;
+                            string historial = @"
+                                INSERT INTO dbo.Historial_Citas
+                                (
+                                    id_cita, accion,
+                                    fecha_anterior,
+                                    hora_anterior,
+                                    fecha_nueva,
+                                    hora_nueva,
+                                    id_usuario,
+                                    fecha_movimiento
+                                )
+                                VALUES
+                                (
+                                    @Cita, 'Creada',
+                                    NULL, NULL,
+                                    @Fecha, @Hora,
+                                    @Usuario, SYSDATETIME()
+                                )";
 
-                            cmd.Parameters.Add(
-                                "@Fecha", SqlDbType.Date
-                            ).Value = fecha;
+                            using (SqlCommand cmd =
+                                new SqlCommand(historial, cn, tx))
+                            {
+                                cmd.Parameters.Add(
+                                    "@Cita", SqlDbType.Int
+                                ).Value = idCita;
 
-                            cmd.Parameters.Add(
-                                "@Hora", SqlDbType.Time
-                            ).Value = inicio;
+                                cmd.Parameters.Add(
+                                    "@Fecha", SqlDbType.Date
+                                ).Value = fecha;
 
-                            cmd.Parameters.Add(
-                                "@Usuario", SqlDbType.Int
-                            ).Value = idUsuarioActual;
+                                cmd.Parameters.Add(
+                                    "@Hora", SqlDbType.Time
+                                ).Value = inicio;
 
-                            cmd.ExecuteNonQuery();
+                                cmd.Parameters.Add(
+                                    "@Usuario", SqlDbType.Int
+                                ).Value = idUsuarioActual;
+
+                                cmd.ExecuteNonQuery();
+                            }
                         }
 
                         tx.Commit();
-                        return nuevaCita;
+                        return idCita;
                     }
                     catch
                     {
                         if (tx.Connection != null)
                             tx.Rollback();
-
                         throw;
                     }
                 }
             }
         }
 
-        // ========================================
-        // ERRORES
-        // ========================================
+        // Determina si la creación de citas tiene
+        // un trigger INSERT habilitado. El nombre
+        // por sí solo no indica su comportamiento.
+        private bool ExisteTriggerHistorialCreacion(
+            SqlConnection cn, SqlTransaction tx)
+        {
+            string sql = @"
+                SELECT COUNT(*)
+                FROM sys.triggers t
+                WHERE t.parent_id =
+                      OBJECT_ID('dbo.Citas')
+                  AND t.is_disabled = 0
+                  AND OBJECTPROPERTY(
+                      t.object_id, 'ExecIsInsertTrigger') = 1";
+
+            using (SqlCommand cmd =
+                new SqlCommand(sql, cn, tx))
+            {
+                return Convert.ToInt32(
+                    cmd.ExecuteScalar()) > 0;
+            }
+        }
+
         private void MostrarError(Exception ex)
         {
             MessageBox.Show(
+                "No se pudo completar la operación:\n\n" +
                 ex.GetBaseException().Message,
                 "MediCitas",
                 MessageBoxButtons.OK,

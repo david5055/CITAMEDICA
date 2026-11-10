@@ -9,15 +9,12 @@ namespace medicitass
         private readonly string usuarioActual;
         private readonly string rolActual;
         private readonly Form formularioLogin;
-        private bool cerrandoSesion;
 
-        // Para visualizar desde el diseñador
         public FrmMenuPrincipal()
             : this("", "Sin sesión", null)
         {
         }
 
-        // Constructor utilizado por FrmLogin
         public FrmMenuPrincipal(
             string usuario,
             string rol,
@@ -25,13 +22,16 @@ namespace medicitass
         {
             InitializeComponent();
 
-            usuarioActual = usuario ?? "";
+            usuarioActual = (usuario ?? "").Trim();
             rolActual = (rol ?? "").Trim();
             formularioLogin = login;
 
             ConfigurarSesion();
         }
 
+        // =====================================
+        // ROLES DEL SISTEMA
+        // =====================================
         private bool EsAdministrador
         {
             get
@@ -62,9 +62,9 @@ namespace medicitass
             }
         }
 
-        // ==========================================
-        // CONFIGURAR MENÚ POR ROL
-        // ==========================================
+        // =====================================
+        // CONFIGURAR PERMISOS
+        // =====================================
         private void ConfigurarSesion()
         {
             lblBienvenida.Text =
@@ -81,92 +81,89 @@ namespace medicitass
             bool doctor = EsDoctor;
 
             // MANTENIMIENTOS
-            mnuMantenimientos.Visible = admin || recepcion;
+            mnuMantenimientos.Visible =
+                admin || recepcion;
 
-            mnuPacientes.Visible = admin || recepcion;
+            mnuPacientes.Visible =
+                admin || recepcion;
+
             mnuDoctores.Visible = admin;
             mnuEspecialidades.Visible = admin;
             mnuRoles.Visible = admin;
             mnuUsuarios.Visible = admin;
 
-            // CONSULTAS GENERALES
-            // El doctor no podrá consultar agendas
-            // de otros médicos desde estas opciones.
-            mnuConsultas.Visible = admin || recepcion;
+            // CONSULTAS
+            mnuConsultas.Visible =
+                admin || recepcion;
 
-            mnuAgendaFecha.Visible = admin || recepcion;
-            mnuAgendaDoctor.Visible = admin || recepcion;
+            mnuAgendaFecha.Visible =
+                admin || recepcion;
 
-            // Se reserva el historial clínico hasta
-            // aplicar filtros y permisos por paciente.
+            mnuAgendaDoctor.Visible =
+                admin || recepcion;
+
             mnuHistorial.Visible = admin;
 
-            mnuDisponibilidad.Visible = admin || recepcion;
-            mnuBusqueda.Visible = admin || recepcion;
-            mnuCanceladas.Visible = admin || recepcion;
+            mnuDisponibilidad.Visible =
+                admin || recepcion;
 
-            // GESTIÓN DE CITAS
-            mnuCitas.Visible = admin || recepcion;
+            mnuBusqueda.Visible =
+                admin || recepcion;
 
-            mnuAgendar.Visible = admin || recepcion;
-            mnuReprogramar.Visible = admin || recepcion;
-            mnuCancelar.Visible = admin || recepcion;
+            mnuCanceladas.Visible =
+                admin || recepcion;
 
-            // Hasta integrar la atención por id_doctor
-            // no se habilita el formulario clínico.
+            // CITAS
+            mnuCitas.Visible =
+                admin || recepcion;
+
+            mnuAgendar.Visible =
+                admin || recepcion;
+
+            mnuReprogramar.Visible =
+                admin || recepcion;
+
+            mnuCancelar.Visible =
+                admin || recepcion;
+
+            // La atención médica se realiza
+            // desde el panel del doctor.
             mnuAtendida.Visible = false;
 
-            // BOTONES DE ACCESO RÁPIDO
-            btnInicio.Visible = admin || recepcion || doctor;
-            btnPacientes.Visible = admin || recepcion;
-            btnDoctores.Visible = admin;
-            btnAgendar.Visible = admin || recepcion;
-            btnConsultas.Visible = admin || recepcion;
+            // ACCESOS RÁPIDOS
+            btnInicio.Visible =
+                admin || recepcion || doctor;
 
-            // Solo se habilitan para los roles correctos.
+            btnPacientes.Visible =
+                admin || recepcion;
+
+            btnDoctores.Visible = admin;
+
+            btnAgendar.Visible =
+                admin || recepcion;
+
+            btnConsultas.Visible =
+                admin || recepcion;
+
+            btnCerrarSesion.Visible = true;
             mnuSesion.Visible = true;
         }
 
-        // ==========================================
-        // INICIO AUTOMÁTICO
-        // ==========================================
+        // =====================================
+        // ABRIR INICIO AUTOMÁTICAMENTE
+        // =====================================
         private void FrmMenuPrincipal_Shown(
-            object sender,
-            EventArgs e)
+            object sender, EventArgs e)
         {
             MostrarInicio();
         }
 
-        // ==========================================
-        // ABRIR VENTANA MDI
-        // ==========================================
-        private void AbrirVentana(Form nueva)
-        {
-            foreach (Form abierta in this.MdiChildren)
-            {
-                if (abierta.GetType() == nueva.GetType())
-                {
-                    abierta.Activate();
-                    abierta.BringToFront();
-                    nueva.Dispose();
-                    return;
-                }
-            }
-
-            nueva.MdiParent = this;
-            nueva.WindowState = FormWindowState.Maximized;
-            nueva.Show();
-            nueva.BringToFront();
-        }
-
-        // ==========================================
-        // MOSTRAR DASHBOARD SEGÚN ROL
-        // ==========================================
         private void MostrarInicio()
         {
-            Form[] abiertas = this.MdiChildren;
+            // Cerrar ventanas secundarias.
+            Form[] ventanas = this.MdiChildren;
 
-            foreach (Form ventana in abiertas)
+            foreach (Form ventana in ventanas)
             {
                 ventana.Close();
             }
@@ -176,34 +173,78 @@ namespace medicitass
                 AbrirVentana(
                     new FrmInicioAdministrador());
             }
-            else if (EsDoctor)
-            {
-                AbrirVentana(
-                    new FrmInicioDoctor(usuarioActual));
-            }
             else if (EsRecepcionista)
             {
                 AbrirVentana(
-                    new FrmInicioRecepcionista(usuarioActual));
+                    new FrmInicioRecepcionista(
+                        usuarioActual));
+            }
+            else if (EsDoctor)
+            {
+                AbrirVentana(
+                    new FrmInicioDoctor(
+                        usuarioActual));
+            }
+            else
+            {
+                MessageBox.Show(
+                    "No se reconoció el rol de la cuenta.",
+                    "MediCitas",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
             }
         }
 
-        // ==========================================
-        // VALIDAR PERMISOS
-        // ==========================================
-        private bool TienePermiso(string formulario)
+        // =====================================
+        // ABRIR FORMULARIOS DENTRO DEL MDI
+        // =====================================
+        private void AbrirVentana(Form nueva)
+        {
+            if (nueva == null)
+                return;
+
+            foreach (Form abierta in this.MdiChildren)
+            {
+                if (abierta.GetType() ==
+                    nueva.GetType())
+                {
+                    abierta.WindowState =
+                        FormWindowState.Maximized;
+
+                    abierta.Activate();
+                    abierta.BringToFront();
+
+                    nueva.Dispose();
+                    return;
+                }
+            }
+
+            nueva.MdiParent = this;
+
+            nueva.FormBorderStyle =
+                FormBorderStyle.None;
+
+            nueva.WindowState =
+                FormWindowState.Maximized;
+
+            nueva.Show();
+            nueva.BringToFront();
+        }
+
+        // =====================================
+        // COMPROBAR PERMISOS DE CADA MÓDULO
+        // =====================================
+        private bool TienePermiso(string nombre)
         {
             if (EsAdministrador)
             {
-                // El formulario clínico del Doctor
-                // se habilitará cuando se valide
-                // el médico asignado.
-                return formulario != "FrmMarcarAtendida";
+                return nombre !=
+                    "FrmMarcarAtendida";
             }
 
             if (EsRecepcionista)
             {
-                switch (formulario)
+                switch (nombre)
                 {
                     case "FrmMantenimientoPacientes":
                     case "FrmAgendarCita":
@@ -218,24 +259,33 @@ namespace medicitass
                 }
             }
 
-            // Doctor:
-            // Por ahora únicamente el Dashboard.
-            // Sus botones clínicos están deshabilitados
-            // hasta conectar id_doctor.
+            // El doctor accede a su propia
+            // agenda mediante FrmInicioDoctor.
             return false;
         }
 
-        // ==========================================
-        // BUSCAR FORMULARIO EN EL PROYECTO
-        // ==========================================
+        // =====================================
+        // CREAR FORMULARIO
+        // CORRECCIÓN DE AGENDAR CITA
+        // =====================================
         private Form CrearFormulario(string nombre)
         {
-            // En tu proyecto Especialidad está
-            // escrito en singular.
+            // IMPORTANTE:
+            // El formulario de Agendar cita
+            // necesita el usuario autenticado.
+            if (nombre == "FrmAgendarCita")
+            {
+                return new FrmAgendarCita(
+                    usuarioActual);
+            }
+
+            // En el proyecto la clase de
+            // Especialidad está en singular.
             if (nombre ==
                 "FrmMantenimientoEspecialidades")
             {
-                nombre = "FrmMantenimientoEspecialidad";
+                nombre =
+                    "FrmMantenimientoEspecialidad";
             }
 
             Type tipo = typeof(FrmMenuPrincipal)
@@ -248,14 +298,13 @@ namespace medicitass
                 return null;
             }
 
-            // Los formularios de mantenimiento deben
-            // contar con un constructor sin parámetros.
-            return Activator.CreateInstance(tipo) as Form;
+            return Activator.CreateInstance(tipo)
+                as Form;
         }
 
-        // ==========================================
-        // ABRIR MÓDULOS CON PERMISOS
-        // ==========================================
+        // =====================================
+        // ABRIR MÓDULOS
+        // =====================================
         private void AbrirModulo(string nombre)
         {
             if (!TienePermiso(nombre))
@@ -271,14 +320,14 @@ namespace medicitass
 
             try
             {
-                Form ventana = CrearFormulario(nombre);
+                Form ventana =
+                    CrearFormulario(nombre);
 
                 if (ventana == null)
                 {
                     MessageBox.Show(
-                        "No se encontró el formulario: " +
-                        nombre +
-                        "\nComprueba el nombre de su clase.",
+                        "No se encontró el formulario:\n" +
+                        nombre,
                         "MediCitas",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
@@ -290,7 +339,7 @@ namespace medicitass
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Error al abrir el módulo:\n" +
+                    "No se pudo abrir el módulo:\n\n" +
                     ex.GetBaseException().Message,
                     "MediCitas",
                     MessageBoxButtons.OK,
@@ -298,84 +347,81 @@ namespace medicitass
             }
         }
 
-        // ==========================================
-        // ACCESOS DEL MENÚ
-        // ==========================================
+        // =====================================
+        // BOTONES LATERALES
+        // =====================================
         private void btnInicio_Click(
-            object sender,
-            EventArgs e)
-        {
-            MostrarInicio();
-        }
-
-        private void mnuInicio_Click(
-            object sender,
-            EventArgs e)
+            object sender, EventArgs e)
         {
             MostrarInicio();
         }
 
         private void btnPacientes_Click(
-            object sender,
-            EventArgs e)
+            object sender, EventArgs e)
         {
             AbrirModulo(
                 "FrmMantenimientoPacientes");
         }
 
         private void btnDoctores_Click(
-            object sender,
-            EventArgs e)
+            object sender, EventArgs e)
         {
             AbrirModulo(
                 "FrmMantenimientoDoctores");
         }
 
         private void btnAgendar_Click(
-            object sender,
-            EventArgs e)
+            object sender, EventArgs e)
         {
-            AbrirModulo(
-                "FrmAgendarCita");
+            AbrirModulo("FrmAgendarCita");
         }
 
         private void btnConsultas_Click(
-            object sender,
-            EventArgs e)
+            object sender, EventArgs e)
         {
             AbrirModulo(
                 "FrmConsultaAgendaDoctor");
         }
 
-        private void ModuloMenu_Click(
-            object sender,
-            EventArgs e)
+        // =====================================
+        // MENÚ SUPERIOR
+        // =====================================
+        private void mnuInicio_Click(
+            object sender, EventArgs e)
         {
-            ToolStripMenuItem item =
-                sender as ToolStripMenuItem;
-
-            if (item == null || item.Tag == null)
-                return;
-
-            AbrirModulo(item.Tag.ToString());
+            MostrarInicio();
         }
 
-        // ==========================================
-        // CERRAR SESIÓN
-        // ==========================================
-        private void btnCerrarSesion_Click(
-            object sender,
-            EventArgs e)
+        private void ModuloMenu_Click(
+            object sender, EventArgs e)
         {
-            DialogResult resultado = MessageBox.Show(
-                "¿Deseas cerrar sesión?",
-                "MediCitas",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
+            ToolStripMenuItem opcion =
+                sender as ToolStripMenuItem;
 
-            if (resultado == DialogResult.Yes)
+            if (opcion == null ||
+                opcion.Tag == null)
+                return;
+
+            AbrirModulo(
+                opcion.Tag.ToString());
+        }
+
+        // =====================================
+        // CERRAR SESIÓN
+        // =====================================
+        private void btnCerrarSesion_Click(
+            object sender, EventArgs e)
+        {
+            DialogResult respuesta =
+                MessageBox.Show(
+                    "¿Deseas cerrar sesión?",
+                    "MediCitas",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+            if (respuesta ==
+                DialogResult.Yes)
             {
-                cerrandoSesion = true;
                 this.Close();
             }
         }

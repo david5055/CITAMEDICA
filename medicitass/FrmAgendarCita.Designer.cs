@@ -7,7 +7,6 @@ namespace medicitass
 
         private System.Windows.Forms.Panel pnlTitulo;
         private System.Windows.Forms.Label lblTitulo;
-
         private System.Windows.Forms.TableLayoutPanel tablaPrincipal;
         private System.Windows.Forms.Panel pnlDatos;
         private System.Windows.Forms.Panel pnlCitas;
@@ -28,7 +27,6 @@ namespace medicitass
 
         private System.Windows.Forms.DateTimePicker dtpFecha;
         private System.Windows.Forms.TextBox txtMotivo;
-
         private System.Windows.Forms.Button btnBuscarHorarios;
         private System.Windows.Forms.Button btnGuardar;
 
@@ -51,10 +49,8 @@ namespace medicitass
         {
             this.pnlTitulo = new System.Windows.Forms.Panel();
             this.lblTitulo = new System.Windows.Forms.Label();
-
             this.tablaPrincipal =
                 new System.Windows.Forms.TableLayoutPanel();
-
             this.pnlDatos = new System.Windows.Forms.Panel();
             this.pnlCitas = new System.Windows.Forms.Panel();
 
@@ -74,12 +70,10 @@ namespace medicitass
 
             this.dtpFecha = new System.Windows.Forms.DateTimePicker();
             this.txtMotivo = new System.Windows.Forms.TextBox();
-
             this.btnBuscarHorarios = new System.Windows.Forms.Button();
             this.btnGuardar = new System.Windows.Forms.Button();
 
             this.dgvCitas = new System.Windows.Forms.DataGridView();
-
             this.colIdCita =
                 new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colHorario =
@@ -95,10 +89,8 @@ namespace medicitass
             this.tablaPrincipal.SuspendLayout();
             this.pnlDatos.SuspendLayout();
             this.pnlCitas.SuspendLayout();
-
             ((System.ComponentModel.ISupportInitialize)
                 (this.dgvCitas)).BeginInit();
-
             this.SuspendLayout();
 
             // ENCABEZADO
@@ -110,8 +102,7 @@ namespace medicitass
                 System.Drawing.Color.FromArgb(21, 121, 194);
 
             this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Text =
-                "Agendamiento de Nueva Cita";
+            this.lblTitulo.Text = "Agendamiento de Nueva Cita";
             this.lblTitulo.AutoSize = true;
             this.lblTitulo.Location =
                 new System.Drawing.Point(25, 19);
@@ -122,7 +113,7 @@ namespace medicitass
                 System.Drawing.Color.White;
             this.pnlTitulo.Controls.Add(this.lblTitulo);
 
-            // DISTRIBUCIÓN GENERAL
+            // DISTRIBUCIÓN
             this.tablaPrincipal.Name = "tablaPrincipal";
             this.tablaPrincipal.Dock =
                 System.Windows.Forms.DockStyle.Fill;
@@ -134,61 +125,54 @@ namespace medicitass
             this.tablaPrincipal.ColumnStyles.Add(
                 new System.Windows.Forms.ColumnStyle(
                     System.Windows.Forms.SizeType.Percent, 40F));
-
             this.tablaPrincipal.ColumnStyles.Add(
                 new System.Windows.Forms.ColumnStyle(
                     System.Windows.Forms.SizeType.Percent, 60F));
-
             this.tablaPrincipal.RowStyles.Add(
                 new System.Windows.Forms.RowStyle(
                     System.Windows.Forms.SizeType.Percent, 100F));
 
-            // PANEL DE DATOS
             this.pnlDatos.Name = "pnlDatos";
             this.pnlDatos.Dock =
                 System.Windows.Forms.DockStyle.Fill;
             this.pnlDatos.AutoScroll = true;
-            this.pnlDatos.BackColor =
-                System.Drawing.Color.White;
-            this.pnlDatos.BorderStyle =
-                System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlDatos.Margin =
                 new System.Windows.Forms.Padding(5);
+            this.pnlDatos.BorderStyle =
+                System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlDatos.BackColor = System.Drawing.Color.White;
 
             // PACIENTE
             this.lblPaciente.Name = "lblPaciente";
             this.lblPaciente.Text = "Paciente:";
             this.lblPaciente.AutoSize = true;
             this.lblPaciente.Location =
-                new System.Drawing.Point(20, 23);
+                new System.Drawing.Point(20, 22);
             this.lblPaciente.Font = new System.Drawing.Font(
                 "Segoe UI", 10F,
                 System.Drawing.FontStyle.Bold);
 
             this.cboPaciente.Name = "cboPaciente";
             this.cboPaciente.Location =
-                new System.Drawing.Point(22, 53);
+                new System.Drawing.Point(22, 52);
             this.cboPaciente.Size =
                 new System.Drawing.Size(220, 29);
             this.cboPaciente.DropDownStyle =
                 System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboPaciente.Anchor =
-                System.Windows.Forms.AnchorStyles.Top |
-                System.Windows.Forms.AnchorStyles.Left;
 
             // ESPECIALIDAD
             this.lblEspecialidad.Name = "lblEspecialidad";
             this.lblEspecialidad.Text = "Especialidad:";
             this.lblEspecialidad.AutoSize = true;
             this.lblEspecialidad.Location =
-                new System.Drawing.Point(258, 23);
+                new System.Drawing.Point(258, 22);
             this.lblEspecialidad.Font = new System.Drawing.Font(
                 "Segoe UI", 10F,
                 System.Drawing.FontStyle.Bold);
 
             this.cboEspecialidad.Name = "cboEspecialidad";
             this.cboEspecialidad.Location =
-                new System.Drawing.Point(260, 53);
+                new System.Drawing.Point(260, 52);
             this.cboEspecialidad.Size =
                 new System.Drawing.Size(215, 29);
             this.cboEspecialidad.DropDownStyle =
@@ -209,7 +193,7 @@ namespace medicitass
 
             this.cboDoctor.Name = "cboDoctor";
             this.cboDoctor.Location =
-                new System.Drawing.Point(22, 140);
+                new System.Drawing.Point(22, 139);
             this.cboDoctor.Size =
                 new System.Drawing.Size(453, 29);
             this.cboDoctor.DropDownStyle =
@@ -223,14 +207,14 @@ namespace medicitass
             this.lblFecha.Text = "Fecha de la cita:";
             this.lblFecha.AutoSize = true;
             this.lblFecha.Location =
-                new System.Drawing.Point(20, 196);
+                new System.Drawing.Point(20, 195);
             this.lblFecha.Font = new System.Drawing.Font(
                 "Segoe UI", 10F,
                 System.Drawing.FontStyle.Bold);
 
             this.dtpFecha.Name = "dtpFecha";
             this.dtpFecha.Location =
-                new System.Drawing.Point(22, 228);
+                new System.Drawing.Point(22, 226);
             this.dtpFecha.Size =
                 new System.Drawing.Size(453, 29);
             this.dtpFecha.Format =
@@ -240,12 +224,11 @@ namespace medicitass
                 new System.EventHandler(
                     this.dtpFecha_ValueChanged);
 
-            // BUSCAR HORARIOS
+            // BOTÓN HORARIOS
             this.btnBuscarHorarios.Name = "btnBuscarHorarios";
-            this.btnBuscarHorarios.Text =
-                "Buscar horarios libres";
+            this.btnBuscarHorarios.Text = "Buscar horarios libres";
             this.btnBuscarHorarios.Location =
-                new System.Drawing.Point(22, 312);
+                new System.Drawing.Point(22, 308);
             this.btnBuscarHorarios.Size =
                 new System.Drawing.Size(220, 43);
             this.btnBuscarHorarios.BackColor =
@@ -256,8 +239,6 @@ namespace medicitass
                 System.Windows.Forms.FlatStyle.Flat;
             this.btnBuscarHorarios.FlatAppearance.BorderSize = 0;
             this.btnBuscarHorarios.UseVisualStyleBackColor = false;
-            this.btnBuscarHorarios.Cursor =
-                System.Windows.Forms.Cursors.Hand;
             this.btnBuscarHorarios.Click +=
                 new System.EventHandler(
                     this.btnBuscarHorarios_Click);
@@ -267,14 +248,14 @@ namespace medicitass
             this.lblHorario.Text = "Bloque de horario:";
             this.lblHorario.AutoSize = true;
             this.lblHorario.Location =
-                new System.Drawing.Point(258, 286);
+                new System.Drawing.Point(258, 282);
             this.lblHorario.Font = new System.Drawing.Font(
                 "Segoe UI", 10F,
                 System.Drawing.FontStyle.Bold);
 
             this.cboHorario.Name = "cboHorario";
             this.cboHorario.Location =
-                new System.Drawing.Point(260, 318);
+                new System.Drawing.Point(260, 315);
             this.cboHorario.Size =
                 new System.Drawing.Size(215, 29);
             this.cboHorario.DropDownStyle =
@@ -285,16 +266,16 @@ namespace medicitass
             this.lblMotivo.Text = "Motivo de la consulta:";
             this.lblMotivo.AutoSize = true;
             this.lblMotivo.Location =
-                new System.Drawing.Point(20, 386);
+                new System.Drawing.Point(20, 385);
             this.lblMotivo.Font = new System.Drawing.Font(
                 "Segoe UI", 10F,
                 System.Drawing.FontStyle.Bold);
 
             this.txtMotivo.Name = "txtMotivo";
             this.txtMotivo.Location =
-                new System.Drawing.Point(22, 420);
+                new System.Drawing.Point(22, 419);
             this.txtMotivo.Size =
-                new System.Drawing.Size(453, 135);
+                new System.Drawing.Size(453, 130);
             this.txtMotivo.Multiline = true;
             this.txtMotivo.ScrollBars =
                 System.Windows.Forms.ScrollBars.Vertical;
@@ -304,7 +285,7 @@ namespace medicitass
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Text = "Guardar cita";
             this.btnGuardar.Location =
-                new System.Drawing.Point(22, 580);
+                new System.Drawing.Point(22, 575);
             this.btnGuardar.Size =
                 new System.Drawing.Size(453, 45);
             this.btnGuardar.BackColor =
@@ -315,8 +296,6 @@ namespace medicitass
                 System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.FlatAppearance.BorderSize = 0;
             this.btnGuardar.UseVisualStyleBackColor = false;
-            this.btnGuardar.Cursor =
-                System.Windows.Forms.Cursors.Hand;
             this.btnGuardar.Enabled = false;
             this.btnGuardar.Click +=
                 new System.EventHandler(this.btnGuardar_Click);
@@ -329,9 +308,9 @@ namespace medicitass
             this.pnlDatos.Controls.Add(this.cboDoctor);
             this.pnlDatos.Controls.Add(this.lblFecha);
             this.pnlDatos.Controls.Add(this.dtpFecha);
+            this.pnlDatos.Controls.Add(this.btnBuscarHorarios);
             this.pnlDatos.Controls.Add(this.lblHorario);
             this.pnlDatos.Controls.Add(this.cboHorario);
-            this.pnlDatos.Controls.Add(this.btnBuscarHorarios);
             this.pnlDatos.Controls.Add(this.lblMotivo);
             this.pnlDatos.Controls.Add(this.txtMotivo);
             this.pnlDatos.Controls.Add(this.btnGuardar);
@@ -342,10 +321,9 @@ namespace medicitass
                 System.Windows.Forms.DockStyle.Fill;
             this.pnlCitas.Margin =
                 new System.Windows.Forms.Padding(5);
-            this.pnlCitas.BackColor =
-                System.Drawing.Color.White;
             this.pnlCitas.BorderStyle =
                 System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlCitas.BackColor = System.Drawing.Color.White;
 
             this.lblTituloCitas.Name = "lblTituloCitas";
             this.lblTituloCitas.Text =
@@ -364,10 +342,11 @@ namespace medicitass
                 System.Drawing.Color.FromArgb(19, 105, 164);
 
             this.lblEstado.Name = "lblEstado";
-            this.lblEstado.Text = "Seleccione los datos de la cita.";
+            this.lblEstado.Text =
+                "Seleccione los datos de la cita.";
             this.lblEstado.Dock =
                 System.Windows.Forms.DockStyle.Bottom;
-            this.lblEstado.Height = 45;
+            this.lblEstado.Height = 43;
             this.lblEstado.Padding =
                 new System.Windows.Forms.Padding(12, 0, 0, 0);
             this.lblEstado.TextAlign =
@@ -375,17 +354,17 @@ namespace medicitass
             this.lblEstado.ForeColor =
                 System.Drawing.Color.DimGray;
 
-            // GRID DE CITAS
+            // TABLA DE CITAS
             this.dgvCitas.Name = "dgvCitas";
             this.dgvCitas.Dock =
                 System.Windows.Forms.DockStyle.Fill;
-            this.dgvCitas.BackgroundColor =
-                System.Drawing.Color.White;
+            this.dgvCitas.ReadOnly = true;
             this.dgvCitas.AllowUserToAddRows = false;
             this.dgvCitas.AllowUserToDeleteRows = false;
-            this.dgvCitas.ReadOnly = true;
             this.dgvCitas.MultiSelect = false;
             this.dgvCitas.RowHeadersVisible = false;
+            this.dgvCitas.BackgroundColor =
+                System.Drawing.Color.White;
             this.dgvCitas.SelectionMode =
                 System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvCitas.AutoSizeColumnsMode =
@@ -396,15 +375,14 @@ namespace medicitass
             this.dgvCitas.ColumnHeadersDefaultCellStyle.ForeColor =
                 System.Drawing.Color.White;
             this.dgvCitas.ColumnHeadersHeight = 40;
-            this.dgvCitas.RowTemplate.Height = 30;
 
             this.colIdCita.Name = "colIdCita";
             this.colIdCita.HeaderText = "Cita N°";
-            this.colIdCita.FillWeight = 60;
+            this.colIdCita.FillWeight = 55;
 
             this.colHorario.Name = "colHorario";
             this.colHorario.HeaderText = "Horario";
-            this.colHorario.FillWeight = 110;
+            this.colHorario.FillWeight = 115;
 
             this.colPaciente.Name = "colPaciente";
             this.colPaciente.HeaderText = "Paciente";
@@ -428,42 +406,33 @@ namespace medicitass
                     this.colMotivo
                 });
 
-            // Orden de Dock.
             this.pnlCitas.Controls.Add(this.dgvCitas);
             this.pnlCitas.Controls.Add(this.lblEstado);
             this.pnlCitas.Controls.Add(this.lblTituloCitas);
 
-            this.tablaPrincipal.Controls.Add(
-                this.pnlDatos, 0, 0);
-            this.tablaPrincipal.Controls.Add(
-                this.pnlCitas, 1, 0);
+            this.tablaPrincipal.Controls.Add(this.pnlDatos, 0, 0);
+            this.tablaPrincipal.Controls.Add(this.pnlCitas, 1, 0);
 
             // FORMULARIO
             this.AutoScaleDimensions =
                 new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode =
                 System.Windows.Forms.AutoScaleMode.Font;
-
             this.ClientSize =
                 new System.Drawing.Size(1300, 800);
             this.MinimumSize =
                 new System.Drawing.Size(1120, 700);
-
             this.Font =
                 new System.Drawing.Font("Segoe UI", 10F);
             this.BackColor =
                 System.Drawing.Color.FromArgb(245, 248, 251);
-
             this.Name = "FrmAgendarCita";
             this.Text = "MediCitas - Agendar Cita Médica";
-            this.StartPosition =
-                System.Windows.Forms.FormStartPosition.CenterScreen;
 
             this.Controls.Add(this.tablaPrincipal);
             this.Controls.Add(this.pnlTitulo);
-
-            this.Load +=
-                new System.EventHandler(this.FrmAgendarCita_Load);
+            this.Load += new System.EventHandler(
+                this.FrmAgendarCita_Load);
 
             this.pnlTitulo.ResumeLayout(false);
             this.pnlTitulo.PerformLayout();
@@ -472,10 +441,8 @@ namespace medicitass
             this.pnlDatos.PerformLayout();
             this.pnlCitas.ResumeLayout(false);
             this.pnlCitas.PerformLayout();
-
             ((System.ComponentModel.ISupportInitialize)
                 (this.dgvCitas)).EndInit();
-
             this.ResumeLayout(false);
         }
     }

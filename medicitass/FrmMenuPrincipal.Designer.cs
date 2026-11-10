@@ -54,14 +54,10 @@ namespace medicitass
         protected override void Dispose(bool disposing)
         {
             if (disposing && components != null)
-            {
                 components.Dispose();
-            }
 
             base.Dispose(disposing);
         }
-
-        #region Windows Form Designer generated code
 
         private void InitializeComponent()
         {
@@ -157,55 +153,55 @@ namespace medicitass
             // =====================================
             // MENÚ SUPERIOR
             // =====================================
-
             this.menuPrincipal.Name = "menuPrincipal";
             this.menuPrincipal.Dock =
                 System.Windows.Forms.DockStyle.Top;
-
             this.menuPrincipal.BackColor =
                 System.Drawing.Color.FromArgb(232, 241, 247);
-
             this.menuPrincipal.ForeColor =
-                System.Drawing.Color.FromArgb(18, 61, 90);
-
+                System.Drawing.Color.FromArgb(19, 62, 92);
             this.menuPrincipal.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 10F,
-                    System.Drawing.FontStyle.Regular);
-
+                new System.Drawing.Font("Segoe UI", 10F);
             this.menuPrincipal.Padding =
-                new System.Windows.Forms.Padding(12, 5, 5, 5);
-
-            this.menuPrincipal.Items.AddRange(
-                new System.Windows.Forms.ToolStripItem[]
-                {
-                    this.mnuInicio,
-                    this.mnuMantenimientos,
-                    this.mnuConsultas,
-                    this.mnuCitas,
-                    this.mnuSesion
-                });
-
-            // =====================================
-            // INICIO
-            // =====================================
+                new System.Windows.Forms.Padding(10, 5, 5, 5);
 
             this.mnuInicio.Name = "mnuInicio";
             this.mnuInicio.Text = "⌂  Inicio";
-
             this.mnuInicio.Click +=
                 new System.EventHandler(
                     this.mnuInicio_Click);
 
-            // =====================================
-            // MANTENIMIENTOS
-            // =====================================
-
             this.mnuMantenimientos.Name =
                 "mnuMantenimientos";
-
             this.mnuMantenimientos.Text =
                 "⚙  Mantenimientos";
+
+            this.mnuPacientes.Name = "mnuPacientes";
+            this.mnuPacientes.Text = "♙  Pacientes";
+            this.mnuPacientes.Tag =
+                "FrmMantenimientoPacientes";
+
+            this.mnuDoctores.Name = "mnuDoctores";
+            this.mnuDoctores.Text = "✚  Doctores";
+            this.mnuDoctores.Tag =
+                "FrmMantenimientoDoctores";
+
+            this.mnuEspecialidades.Name =
+                "mnuEspecialidades";
+            this.mnuEspecialidades.Text =
+                "✧  Especialidades";
+            this.mnuEspecialidades.Tag =
+                "FrmMantenimientoEspecialidades";
+
+            this.mnuRoles.Name = "mnuRoles";
+            this.mnuRoles.Text = "◇  Roles";
+            this.mnuRoles.Tag =
+                "FrmMantenimientoRoles";
+
+            this.mnuUsuarios.Name = "mnuUsuarios";
+            this.mnuUsuarios.Text = "♙  Usuarios";
+            this.mnuUsuarios.Tag =
+                "FrmMantenimientoUsuarios";
 
             this.mnuMantenimientos.DropDownItems.AddRange(
                 new System.Windows.Forms.ToolStripItem[]
@@ -217,66 +213,57 @@ namespace medicitass
                     this.mnuUsuarios
                 });
 
-            // PACIENTES
-            this.mnuPacientes.Name = "mnuPacientes";
-            this.mnuPacientes.Text = "♙  Pacientes";
-            this.mnuPacientes.Tag =
-                "FrmMantenimientoPacientes";
-
             this.mnuPacientes.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
-
-            // DOCTORES
-            this.mnuDoctores.Name = "mnuDoctores";
-            this.mnuDoctores.Text = "✚  Doctores";
-            this.mnuDoctores.Tag =
-                "FrmMantenimientoDoctores";
-
+                new System.EventHandler(this.ModuloMenu_Click);
             this.mnuDoctores.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
-
-            // ESPECIALIDADES
-            this.mnuEspecialidades.Name =
-                "mnuEspecialidades";
-
-            this.mnuEspecialidades.Text =
-                "✧  Especialidades";
-
-            this.mnuEspecialidades.Tag =
-                "FrmMantenimientoEspecialidades";
-
+                new System.EventHandler(this.ModuloMenu_Click);
             this.mnuEspecialidades.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
-
-            // ROLES
-            this.mnuRoles.Name = "mnuRoles";
-            this.mnuRoles.Text = "◇  Roles";
-            this.mnuRoles.Tag =
-                "FrmMantenimientoRoles";
-
+                new System.EventHandler(this.ModuloMenu_Click);
             this.mnuRoles.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
-
-            // USUARIOS
-            this.mnuUsuarios.Name = "mnuUsuarios";
-            this.mnuUsuarios.Text = "♙  Usuarios";
-            this.mnuUsuarios.Tag =
-                "FrmMantenimientoUsuarios";
-
+                new System.EventHandler(this.ModuloMenu_Click);
             this.mnuUsuarios.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
+                new System.EventHandler(this.ModuloMenu_Click);
 
             // =====================================
             // CONSULTAS
             // =====================================
-
             this.mnuConsultas.Name = "mnuConsultas";
             this.mnuConsultas.Text = "⌕  Consultas";
+
+            this.mnuAgendaFecha.Name = "mnuAgendaFecha";
+            this.mnuAgendaFecha.Text = "▦  Agenda por fecha";
+            this.mnuAgendaFecha.Tag =
+                "FrmConsultaAgendaFecha";
+
+            this.mnuAgendaDoctor.Name = "mnuAgendaDoctor";
+            this.mnuAgendaDoctor.Text = "✚  Agenda por doctor";
+            this.mnuAgendaDoctor.Tag =
+                "FrmConsultaAgendaDoctor";
+
+            this.mnuHistorial.Name = "mnuHistorial";
+            this.mnuHistorial.Text =
+                "▤  Historial de pacientes";
+            this.mnuHistorial.Tag =
+                "FrmConsultaHistorialPaciente";
+
+            this.mnuDisponibilidad.Name =
+                "mnuDisponibilidad";
+            this.mnuDisponibilidad.Text =
+                "◷  Disponibilidad";
+            this.mnuDisponibilidad.Tag =
+                "FrmConsultaDisponibilidad";
+
+            this.mnuBusqueda.Name = "mnuBusqueda";
+            this.mnuBusqueda.Text =
+                "⌕  Búsqueda general";
+            this.mnuBusqueda.Tag =
+                "FrmBusquedaGeneral";
+
+            this.mnuCanceladas.Name = "mnuCanceladas";
+            this.mnuCanceladas.Text =
+                "×  Citas canceladas";
+            this.mnuCanceladas.Tag =
+                "FrmConsultaCitasCanceladas";
 
             this.mnuConsultas.DropDownItems.AddRange(
                 new System.Windows.Forms.ToolStripItem[]
@@ -289,94 +276,41 @@ namespace medicitass
                     this.mnuCanceladas
                 });
 
-            // AGENDA POR FECHA
-            this.mnuAgendaFecha.Name =
-                "mnuAgendaFecha";
-
-            this.mnuAgendaFecha.Text =
-                "▦  Agenda por fecha";
-
-            this.mnuAgendaFecha.Tag =
-                "FrmConsultaAgendaFecha";
-
             this.mnuAgendaFecha.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
-
-            // AGENDA POR DOCTOR
-            this.mnuAgendaDoctor.Name =
-                "mnuAgendaDoctor";
-
-            this.mnuAgendaDoctor.Text =
-                "✚  Agenda por doctor";
-
-            this.mnuAgendaDoctor.Tag =
-                "FrmConsultaAgendaDoctor";
-
+                new System.EventHandler(this.ModuloMenu_Click);
             this.mnuAgendaDoctor.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
-
-            // HISTORIAL
-            this.mnuHistorial.Name =
-                "mnuHistorial";
-
-            this.mnuHistorial.Text =
-                "▤  Historial de pacientes";
-
-            this.mnuHistorial.Tag =
-                "FrmConsultaHistorialPaciente";
-
+                new System.EventHandler(this.ModuloMenu_Click);
             this.mnuHistorial.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
-
-            // DISPONIBILIDAD
-            this.mnuDisponibilidad.Name =
-                "mnuDisponibilidad";
-
-            this.mnuDisponibilidad.Text =
-                "◷  Disponibilidad";
-
-            this.mnuDisponibilidad.Tag =
-                "FrmConsultaDisponibilidad";
-
+                new System.EventHandler(this.ModuloMenu_Click);
             this.mnuDisponibilidad.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
-
-            // BÚSQUEDA GENERAL
-            this.mnuBusqueda.Name = "mnuBusqueda";
-            this.mnuBusqueda.Text =
-                "⌕  Búsqueda general";
-
-            this.mnuBusqueda.Tag =
-                "FrmBusquedaGeneral";
-
+                new System.EventHandler(this.ModuloMenu_Click);
             this.mnuBusqueda.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
-
-            // CITAS CANCELADAS
-            this.mnuCanceladas.Name =
-                "mnuCanceladas";
-
-            this.mnuCanceladas.Text =
-                "×  Citas canceladas";
-
-            this.mnuCanceladas.Tag =
-                "FrmConsultaCitasCanceladas";
-
+                new System.EventHandler(this.ModuloMenu_Click);
             this.mnuCanceladas.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
+                new System.EventHandler(this.ModuloMenu_Click);
 
             // =====================================
             // CITAS
             // =====================================
-
             this.mnuCitas.Name = "mnuCitas";
             this.mnuCitas.Text = "▦  Citas";
+
+            this.mnuAgendar.Name = "mnuAgendar";
+            this.mnuAgendar.Text = "＋  Agendar cita";
+            this.mnuAgendar.Tag = "FrmAgendarCita";
+
+            this.mnuReprogramar.Name = "mnuReprogramar";
+            this.mnuReprogramar.Text = "↻  Reprogramar cita";
+            this.mnuReprogramar.Tag =
+                "FrmReprogramarCita";
+
+            this.mnuCancelar.Name = "mnuCancelar";
+            this.mnuCancelar.Text = "×  Cancelar cita";
+            this.mnuCancelar.Tag = "FrmCancelarCita";
+
+            this.mnuAtendida.Name = "mnuAtendida";
+            this.mnuAtendida.Text = "✓  Marcar atendida";
+            this.mnuAtendida.Tag = "FrmMarcarAtendida";
 
             this.mnuCitas.DropDownItems.AddRange(
                 new System.Windows.Forms.ToolStripItem[]
@@ -387,67 +321,23 @@ namespace medicitass
                     this.mnuAtendida
                 });
 
-            // AGENDAR
-            this.mnuAgendar.Name = "mnuAgendar";
-            this.mnuAgendar.Text =
-                "＋  Agendar cita";
-            this.mnuAgendar.Tag =
-                "FrmAgendarCita";
-
             this.mnuAgendar.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
-
-            // REPROGRAMAR
-            this.mnuReprogramar.Name =
-                "mnuReprogramar";
-
-            this.mnuReprogramar.Text =
-                "↻  Reprogramar cita";
-
-            this.mnuReprogramar.Tag =
-                "FrmReprogramarCita";
-
+                new System.EventHandler(this.ModuloMenu_Click);
             this.mnuReprogramar.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
-
-            // CANCELAR
-            this.mnuCancelar.Name = "mnuCancelar";
-            this.mnuCancelar.Text =
-                "×  Cancelar cita";
-            this.mnuCancelar.Tag =
-                "FrmCancelarCita";
-
+                new System.EventHandler(this.ModuloMenu_Click);
             this.mnuCancelar.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
-
-            // MARCAR ATENDIDA
-            this.mnuAtendida.Name = "mnuAtendida";
-            this.mnuAtendida.Text =
-                "✓  Marcar cita atendida";
-
-            this.mnuAtendida.Tag =
-                "FrmMarcarAtendida";
-
+                new System.EventHandler(this.ModuloMenu_Click);
             this.mnuAtendida.Click +=
-                new System.EventHandler(
-                    this.ModuloMenu_Click);
+                new System.EventHandler(this.ModuloMenu_Click);
 
             // =====================================
             // SESIÓN
             // =====================================
-
             this.mnuSesion.Name = "mnuSesion";
             this.mnuSesion.Text = "♙  Sesión";
 
-            this.mnuCerrarSesion.Name =
-                "mnuCerrarSesion";
-
-            this.mnuCerrarSesion.Text =
-                "⇥  Cerrar sesión";
-
+            this.mnuCerrarSesion.Name = "mnuCerrarSesion";
+            this.mnuCerrarSesion.Text = "⇥  Cerrar sesión";
             this.mnuCerrarSesion.Click +=
                 new System.EventHandler(
                     this.btnCerrarSesion_Click);
@@ -455,525 +345,282 @@ namespace medicitass
             this.mnuSesion.DropDownItems.Add(
                 this.mnuCerrarSesion);
 
-            // =====================================
-            // ENCABEZADO AZUL
-            // =====================================
+            this.menuPrincipal.Items.AddRange(
+                new System.Windows.Forms.ToolStripItem[]
+                {
+                    this.mnuInicio,
+                    this.mnuMantenimientos,
+                    this.mnuConsultas,
+                    this.mnuCitas,
+                    this.mnuSesion
+                });
 
-            this.pnlEncabezado.Name =
-                "pnlEncabezado";
-
+            // =====================================
+            // ENCABEZADO
+            // =====================================
+            this.pnlEncabezado.Name = "pnlEncabezado";
             this.pnlEncabezado.Dock =
                 System.Windows.Forms.DockStyle.Top;
-
             this.pnlEncabezado.Height = 110;
-
             this.pnlEncabezado.BackColor =
                 System.Drawing.Color.FromArgb(19, 62, 92);
 
-            // TÍTULO MEDICITAS
             this.lblTitulo.Name = "lblTitulo";
             this.lblTitulo.Text = "✚  MediCitas";
-
             this.lblTitulo.AutoSize = true;
-
-            this.lblTitulo.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 24F,
-                    System.Drawing.FontStyle.Bold);
-
+            this.lblTitulo.Font = new System.Drawing.Font(
+                "Segoe UI", 24F,
+                System.Drawing.FontStyle.Bold);
             this.lblTitulo.ForeColor =
                 System.Drawing.Color.White;
-
             this.lblTitulo.Location =
                 new System.Drawing.Point(25, 12);
 
-            // DESCRIPCIÓN
-            this.lblDescripcion.Name =
-                "lblDescripcion";
-
+            this.lblDescripcion.Name = "lblDescripcion";
             this.lblDescripcion.Text =
                 "Sistema de Gestión de Citas Médicas";
-
             this.lblDescripcion.AutoSize = true;
-
             this.lblDescripcion.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 10F);
-
+                new System.Drawing.Font("Segoe UI", 10F);
             this.lblDescripcion.ForeColor =
-                System.Drawing.Color.FromArgb(221, 236, 244);
-
+                System.Drawing.Color.White;
             this.lblDescripcion.Location =
-                new System.Drawing.Point(34, 74);
+                new System.Drawing.Point(35, 76);
 
-            // BIENVENIDA
-            this.lblBienvenida.Name =
-                "lblBienvenida";
-
+            this.lblBienvenida.Name = "lblBienvenida";
             this.lblBienvenida.Text =
                 "Bienvenido a MediCitas";
-
             this.lblBienvenida.AutoSize = true;
-
-            this.lblBienvenida.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 12F,
-                    System.Drawing.FontStyle.Bold);
-
+            this.lblBienvenida.Font = new System.Drawing.Font(
+                "Segoe UI", 11F,
+                System.Drawing.FontStyle.Bold);
             this.lblBienvenida.ForeColor =
                 System.Drawing.Color.White;
-
             this.lblBienvenida.Location =
-                new System.Drawing.Point(620, 24);
-
+                new System.Drawing.Point(620, 23);
             this.lblBienvenida.Anchor =
                 System.Windows.Forms.AnchorStyles.Top |
                 System.Windows.Forms.AnchorStyles.Right;
 
-            // ROL
             this.lblRol.Name = "lblRol";
-            this.lblRol.Text = "Rol: Sin sesión";
-
+            this.lblRol.Text = "Rol:";
             this.lblRol.AutoSize = true;
-
             this.lblRol.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 10F);
-
+                new System.Drawing.Font("Segoe UI", 10F);
             this.lblRol.ForeColor =
-                System.Drawing.Color.FromArgb(221, 236, 244);
-
+                System.Drawing.Color.White;
             this.lblRol.Location =
-                new System.Drawing.Point(620, 64);
-
+                new System.Drawing.Point(620, 66);
             this.lblRol.Anchor =
                 System.Windows.Forms.AnchorStyles.Top |
                 System.Windows.Forms.AnchorStyles.Right;
 
-            this.pnlEncabezado.Controls.Add(
-                this.lblTitulo);
-
-            this.pnlEncabezado.Controls.Add(
-                this.lblDescripcion);
-
-            this.pnlEncabezado.Controls.Add(
-                this.lblBienvenida);
-
-            this.pnlEncabezado.Controls.Add(
-                this.lblRol);
+            this.pnlEncabezado.Controls.Add(this.lblTitulo);
+            this.pnlEncabezado.Controls.Add(this.lblDescripcion);
+            this.pnlEncabezado.Controls.Add(this.lblBienvenida);
+            this.pnlEncabezado.Controls.Add(this.lblRol);
 
             // =====================================
             // PANEL LATERAL
             // =====================================
-
             this.pnlLateral.Name = "pnlLateral";
-
             this.pnlLateral.Dock =
                 System.Windows.Forms.DockStyle.Left;
-
             this.pnlLateral.Width = 205;
-
+            this.pnlLateral.AutoScroll = true;
             this.pnlLateral.BackColor =
                 System.Drawing.Color.FromArgb(237, 245, 250);
 
-            this.pnlLateral.AutoScroll = true;
-
-            // TÍTULO ACCESOS
             this.lblAccesos.Name = "lblAccesos";
-
-            this.lblAccesos.Text =
-                "ACCESOS RÁPIDOS";
-
+            this.lblAccesos.Text = "ACCESOS RÁPIDOS";
             this.lblAccesos.AutoSize = true;
-
-            this.lblAccesos.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 11F,
-                    System.Drawing.FontStyle.Bold);
-
-            this.lblAccesos.ForeColor =
-                System.Drawing.Color.FromArgb(19, 62, 92);
-
             this.lblAccesos.Location =
-                new System.Drawing.Point(17, 22);
+                new System.Drawing.Point(15, 21);
+            this.lblAccesos.Font = new System.Drawing.Font(
+                "Segoe UI", 10F,
+                System.Drawing.FontStyle.Bold);
 
-            // =====================================
             // BOTÓN INICIO
-            // =====================================
-
             this.btnInicio.Name = "btnInicio";
-
             this.btnInicio.Text = "⌂   Inicio";
-
             this.btnInicio.Location =
-                new System.Drawing.Point(16, 70);
-
+                new System.Drawing.Point(15, 70);
             this.btnInicio.Size =
-                new System.Drawing.Size(173, 45);
-
+                new System.Drawing.Size(175, 45);
             this.btnInicio.BackColor =
-                System.Drawing.Color.FromArgb(57, 126, 174);
-
+                System.Drawing.Color.SteelBlue;
             this.btnInicio.ForeColor =
                 System.Drawing.Color.White;
-
-            this.btnInicio.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 11F,
-                    System.Drawing.FontStyle.Bold);
-
             this.btnInicio.FlatStyle =
                 System.Windows.Forms.FlatStyle.Flat;
-
             this.btnInicio.FlatAppearance.BorderSize = 0;
-
-            this.btnInicio.TextAlign =
-                System.Drawing.ContentAlignment.MiddleCenter;
-
             this.btnInicio.UseVisualStyleBackColor = false;
-
-            this.btnInicio.Cursor =
-                System.Windows.Forms.Cursors.Hand;
-
             this.btnInicio.Click +=
-                new System.EventHandler(
-                    this.btnInicio_Click);
+                new System.EventHandler(this.btnInicio_Click);
 
-            // =====================================
             // BOTÓN PACIENTES
-            // =====================================
-
             this.btnPacientes.Name = "btnPacientes";
-
-            this.btnPacientes.Text =
-                "♙   Pacientes";
-
+            this.btnPacientes.Text = "♙   Pacientes";
             this.btnPacientes.Location =
-                new System.Drawing.Point(16, 126);
-
+                new System.Drawing.Point(15, 126);
             this.btnPacientes.Size =
-                new System.Drawing.Size(173, 45);
-
+                new System.Drawing.Size(175, 45);
             this.btnPacientes.BackColor =
-                System.Drawing.Color.FromArgb(57, 126, 174);
-
+                System.Drawing.Color.SteelBlue;
             this.btnPacientes.ForeColor =
                 System.Drawing.Color.White;
-
-            this.btnPacientes.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 11F,
-                    System.Drawing.FontStyle.Bold);
-
             this.btnPacientes.FlatStyle =
                 System.Windows.Forms.FlatStyle.Flat;
-
             this.btnPacientes.FlatAppearance.BorderSize = 0;
-
-            this.btnPacientes.Cursor =
-                System.Windows.Forms.Cursors.Hand;
-
             this.btnPacientes.UseVisualStyleBackColor = false;
-
             this.btnPacientes.Click +=
-                new System.EventHandler(
-                    this.btnPacientes_Click);
+                new System.EventHandler(this.btnPacientes_Click);
 
-            // =====================================
             // BOTÓN DOCTORES
-            // =====================================
-
             this.btnDoctores.Name = "btnDoctores";
-
-            this.btnDoctores.Text =
-                "✚   Doctores";
-
+            this.btnDoctores.Text = "✚   Doctores";
             this.btnDoctores.Location =
-                new System.Drawing.Point(16, 182);
-
+                new System.Drawing.Point(15, 182);
             this.btnDoctores.Size =
-                new System.Drawing.Size(173, 45);
-
+                new System.Drawing.Size(175, 45);
             this.btnDoctores.BackColor =
-                System.Drawing.Color.FromArgb(57, 126, 174);
-
+                System.Drawing.Color.SteelBlue;
             this.btnDoctores.ForeColor =
                 System.Drawing.Color.White;
-
-            this.btnDoctores.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 11F,
-                    System.Drawing.FontStyle.Bold);
-
             this.btnDoctores.FlatStyle =
                 System.Windows.Forms.FlatStyle.Flat;
-
             this.btnDoctores.FlatAppearance.BorderSize = 0;
-
-            this.btnDoctores.Cursor =
-                System.Windows.Forms.Cursors.Hand;
-
             this.btnDoctores.UseVisualStyleBackColor = false;
-
             this.btnDoctores.Click +=
-                new System.EventHandler(
-                    this.btnDoctores_Click);
+                new System.EventHandler(this.btnDoctores_Click);
 
-            // =====================================
-            // BOTÓN AGENDAR CITA
-            // =====================================
-
+            // BOTÓN AGENDAR
             this.btnAgendar.Name = "btnAgendar";
-
-            this.btnAgendar.Text =
-                "＋   Agendar cita";
-
+            this.btnAgendar.Text = "＋   Agendar cita";
             this.btnAgendar.Location =
-                new System.Drawing.Point(16, 238);
-
+                new System.Drawing.Point(15, 238);
             this.btnAgendar.Size =
-                new System.Drawing.Size(173, 45);
-
+                new System.Drawing.Size(175, 45);
             this.btnAgendar.BackColor =
-                System.Drawing.Color.FromArgb(32, 148, 105);
-
+                System.Drawing.Color.SeaGreen;
             this.btnAgendar.ForeColor =
                 System.Drawing.Color.White;
-
-            this.btnAgendar.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 11F,
-                    System.Drawing.FontStyle.Bold);
-
             this.btnAgendar.FlatStyle =
                 System.Windows.Forms.FlatStyle.Flat;
-
             this.btnAgendar.FlatAppearance.BorderSize = 0;
-
-            this.btnAgendar.Cursor =
-                System.Windows.Forms.Cursors.Hand;
-
             this.btnAgendar.UseVisualStyleBackColor = false;
-
             this.btnAgendar.Click +=
-                new System.EventHandler(
-                    this.btnAgendar_Click);
+                new System.EventHandler(this.btnAgendar_Click);
 
-            // =====================================
             // BOTÓN CONSULTAS
-            // =====================================
-
             this.btnConsultas.Name = "btnConsultas";
-
-            this.btnConsultas.Text =
-                "⌕   Consultas";
-
+            this.btnConsultas.Text = "⌕   Consultas";
             this.btnConsultas.Location =
-                new System.Drawing.Point(16, 294);
-
+                new System.Drawing.Point(15, 294);
             this.btnConsultas.Size =
-                new System.Drawing.Size(173, 45);
-
+                new System.Drawing.Size(175, 45);
             this.btnConsultas.BackColor =
-                System.Drawing.Color.FromArgb(57, 126, 174);
-
+                System.Drawing.Color.SteelBlue;
             this.btnConsultas.ForeColor =
                 System.Drawing.Color.White;
-
-            this.btnConsultas.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 11F,
-                    System.Drawing.FontStyle.Bold);
-
             this.btnConsultas.FlatStyle =
                 System.Windows.Forms.FlatStyle.Flat;
-
             this.btnConsultas.FlatAppearance.BorderSize = 0;
-
-            this.btnConsultas.Cursor =
-                System.Windows.Forms.Cursors.Hand;
-
             this.btnConsultas.UseVisualStyleBackColor = false;
-
             this.btnConsultas.Click +=
-                new System.EventHandler(
-                    this.btnConsultas_Click);
+                new System.EventHandler(this.btnConsultas_Click);
 
-            // =====================================
             // BOTÓN CERRAR SESIÓN
-            // =====================================
-
-            this.btnCerrarSesion.Name =
-                "btnCerrarSesion";
-
-            this.btnCerrarSesion.Text =
-                "⇥   Cerrar sesión";
-
+            this.btnCerrarSesion.Name = "btnCerrarSesion";
+            this.btnCerrarSesion.Text = "⇥   Cerrar sesión";
             this.btnCerrarSesion.Location =
-                new System.Drawing.Point(16, 375);
-
+                new System.Drawing.Point(15, 375);
             this.btnCerrarSesion.Size =
-                new System.Drawing.Size(173, 45);
-
+                new System.Drawing.Size(175, 45);
             this.btnCerrarSesion.BackColor =
-                System.Drawing.Color.FromArgb(177, 45, 53);
-
+                System.Drawing.Color.Firebrick;
             this.btnCerrarSesion.ForeColor =
                 System.Drawing.Color.White;
-
-            this.btnCerrarSesion.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 10F,
-                    System.Drawing.FontStyle.Bold);
-
             this.btnCerrarSesion.FlatStyle =
                 System.Windows.Forms.FlatStyle.Flat;
-
             this.btnCerrarSesion.FlatAppearance.BorderSize = 0;
-
-            this.btnCerrarSesion.Cursor =
-                System.Windows.Forms.Cursors.Hand;
-
             this.btnCerrarSesion.UseVisualStyleBackColor = false;
-
             this.btnCerrarSesion.Click +=
-                new System.EventHandler(
-                    this.btnCerrarSesion_Click);
+                new System.EventHandler(this.btnCerrarSesion_Click);
 
-            // AGREGAR BOTONES AL PANEL
-
-            this.pnlLateral.Controls.Add(
-                this.lblAccesos);
-
-            this.pnlLateral.Controls.Add(
-                this.btnInicio);
-
-            this.pnlLateral.Controls.Add(
-                this.btnPacientes);
-
-            this.pnlLateral.Controls.Add(
-                this.btnDoctores);
-
-            this.pnlLateral.Controls.Add(
-                this.btnAgendar);
-
-            this.pnlLateral.Controls.Add(
-                this.btnConsultas);
-
-            this.pnlLateral.Controls.Add(
-                this.btnCerrarSesion);
+            this.pnlLateral.Controls.Add(this.lblAccesos);
+            this.pnlLateral.Controls.Add(this.btnInicio);
+            this.pnlLateral.Controls.Add(this.btnPacientes);
+            this.pnlLateral.Controls.Add(this.btnDoctores);
+            this.pnlLateral.Controls.Add(this.btnAgendar);
+            this.pnlLateral.Controls.Add(this.btnConsultas);
+            this.pnlLateral.Controls.Add(this.btnCerrarSesion);
 
             // =====================================
-            // BARRA DE ESTADO
+            // BARRA INFERIOR
             // =====================================
-
             this.barraEstado.Name = "barraEstado";
-
             this.barraEstado.Dock =
                 System.Windows.Forms.DockStyle.Bottom;
-
             this.barraEstado.BackColor =
                 System.Drawing.Color.FromArgb(19, 62, 92);
-
-            this.barraEstado.ForeColor =
-                System.Drawing.Color.White;
-
-            this.barraEstado.Items.Add(
-                this.lblEstado);
-
             this.barraEstado.SizingGrip = false;
 
             this.lblEstado.Name = "lblEstado";
-
-            this.lblEstado.Text =
-                "MediCitas | Sistema activo";
-
+            this.lblEstado.Text = "MediCitas | Sistema activo";
             this.lblEstado.ForeColor =
                 System.Drawing.Color.White;
 
-            // =====================================
-            // CONFIGURACIÓN DEL FORMULARIO
-            // =====================================
+            this.barraEstado.Items.Add(this.lblEstado);
 
+            // =====================================
+            // CONFIGURACIÓN PRINCIPAL
+            // =====================================
             this.AutoScaleDimensions =
                 new System.Drawing.SizeF(8F, 16F);
-
             this.AutoScaleMode =
                 System.Windows.Forms.AutoScaleMode.Font;
-
             this.ClientSize =
                 new System.Drawing.Size(1200, 750);
-
             this.MinimumSize =
                 new System.Drawing.Size(950, 600);
 
+            this.Name = "FrmMenuPrincipal";
+            this.Text = "MediCitas - Menú Principal";
             this.Font =
-                new System.Drawing.Font(
-                    "Segoe UI", 10F);
-
+                new System.Drawing.Font("Segoe UI", 10F);
             this.BackColor =
                 System.Drawing.Color.White;
 
-            this.Name = "FrmMenuPrincipal";
-
-            this.Text =
-                "MediCitas - Menú Principal";
-
-            this.StartPosition =
-                System.Windows.Forms.FormStartPosition.CenterScreen;
-
+            this.IsMdiContainer = true;
             this.WindowState =
                 System.Windows.Forms.FormWindowState.Maximized;
-
-            this.IsMdiContainer = true;
-
-            this.MainMenuStrip =
-                this.menuPrincipal;
-
-            // =====================================
-            // AGREGAR CONTROLES PRINCIPALES
-            // =====================================
+            this.StartPosition =
+                System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.MainMenuStrip = this.menuPrincipal;
 
             this.Controls.Add(this.pnlLateral);
-
             this.Controls.Add(this.pnlEncabezado);
-
             this.Controls.Add(this.menuPrincipal);
-
             this.Controls.Add(this.barraEstado);
 
-            // =====================================
-            // EVENTOS DEL FORMULARIO
-            // =====================================
-
-            this.Shown +=
-                new System.EventHandler(
-                    this.FrmMenuPrincipal_Shown);
+            this.Shown += new System.EventHandler(
+                this.FrmMenuPrincipal_Shown);
 
             this.FormClosed +=
                 new System.Windows.Forms.FormClosedEventHandler(
                     this.FrmMenuPrincipal_FormClosed);
 
-            // =====================================
-            // FINALIZAR DISEÑO
-            // =====================================
-
             this.menuPrincipal.ResumeLayout(false);
             this.menuPrincipal.PerformLayout();
-
             this.pnlEncabezado.ResumeLayout(false);
             this.pnlEncabezado.PerformLayout();
-
             this.pnlLateral.ResumeLayout(false);
             this.pnlLateral.PerformLayout();
-
             this.barraEstado.ResumeLayout(false);
             this.barraEstado.PerformLayout();
-
             this.ResumeLayout(false);
             this.PerformLayout();
         }
-
-        #endregion
     }
 }
