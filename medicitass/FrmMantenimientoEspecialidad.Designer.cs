@@ -1,6 +1,6 @@
 ﻿namespace medicitass
 {
-    partial class FrmMantenimientoEspecialidades
+    partial class FrmMantenimientoEspecialidad
     {
         private System.ComponentModel.IContainer components = null;
 

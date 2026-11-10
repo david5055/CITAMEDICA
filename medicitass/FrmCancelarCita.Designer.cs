@@ -62,46 +62,50 @@ namespace medicitass
             // 
             // pnlHeader
             // 
-            this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(127)))), ((int)(((byte)(140)))));
+            this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
             this.pnlHeader.Controls.Add(this.lblSubtitulo);
             this.pnlHeader.Controls.Add(this.lblTitulo);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
+            this.pnlHeader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(1000, 70);
+            this.pnlHeader.Size = new System.Drawing.Size(1333, 86);
             this.pnlHeader.TabIndex = 0;
-            // 
-            // lblTitulo
-            // 
-            this.lblTitulo.AutoSize = true;
-            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitulo.ForeColor = System.Drawing.Color.White;
-            this.lblTitulo.Location = new System.Drawing.Point(16, 12);
-            this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(306, 30);
-            this.lblTitulo.TabIndex = 0;
-            this.lblTitulo.Text = "Cancelación de Citas Médicas";
             // 
             // lblSubtitulo
             // 
             this.lblSubtitulo.AutoSize = true;
             this.lblSubtitulo.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSubtitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(247)))), ((int)(((byte)(251)))));
-            this.lblSubtitulo.Location = new System.Drawing.Point(18, 42);
+            this.lblSubtitulo.Location = new System.Drawing.Point(24, 52);
+            this.lblSubtitulo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSubtitulo.Name = "lblSubtitulo";
-            this.lblSubtitulo.Size = new System.Drawing.Size(425, 17);
+            this.lblSubtitulo.Size = new System.Drawing.Size(617, 23);
             this.lblSubtitulo.TabIndex = 1;
             this.lblSubtitulo.Text = "Seleccione una cita programada e ingrese el motivo obligatorio para cancelarla.";
+            // 
+            // lblTitulo
+            // 
+            this.lblTitulo.AutoSize = true;
+            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitulo.ForeColor = System.Drawing.Color.White;
+            this.lblTitulo.Location = new System.Drawing.Point(21, 15);
+            this.lblTitulo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTitulo.Name = "lblTitulo";
+            this.lblTitulo.Size = new System.Drawing.Size(392, 37);
+            this.lblTitulo.TabIndex = 0;
+            this.lblTitulo.Text = "Cancelación de Citas Médicas";
             // 
             // pnlContenedor
             // 
             this.pnlContenedor.Controls.Add(this.pnlIzquierdo);
             this.pnlContenedor.Controls.Add(this.pnlDerecho);
             this.pnlContenedor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlContenedor.Location = new System.Drawing.Point(0, 70);
+            this.pnlContenedor.Location = new System.Drawing.Point(0, 86);
+            this.pnlContenedor.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pnlContenedor.Name = "pnlContenedor";
-            this.pnlContenedor.Padding = new System.Windows.Forms.Padding(12);
-            this.pnlContenedor.Size = new System.Drawing.Size(1000, 530);
+            this.pnlContenedor.Padding = new System.Windows.Forms.Padding(16, 15, 16, 15);
+            this.pnlContenedor.Size = new System.Drawing.Size(1333, 652);
             this.pnlContenedor.TabIndex = 1;
             // 
             // pnlIzquierdo
@@ -109,9 +113,10 @@ namespace medicitass
             this.pnlIzquierdo.Controls.Add(this.dgvCitasProgramadas);
             this.pnlIzquierdo.Controls.Add(this.lblTituloTabla);
             this.pnlIzquierdo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlIzquierdo.Location = new System.Drawing.Point(12, 12);
+            this.pnlIzquierdo.Location = new System.Drawing.Point(16, 15);
+            this.pnlIzquierdo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pnlIzquierdo.Name = "pnlIzquierdo";
-            this.pnlIzquierdo.Size = new System.Drawing.Size(616, 506);
+            this.pnlIzquierdo.Size = new System.Drawing.Size(822, 622);
             this.pnlIzquierdo.TabIndex = 0;
             // 
             // dgvCitasProgramadas
@@ -140,13 +145,15 @@ namespace medicitass
             this.dgvCitasProgramadas.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvCitasProgramadas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvCitasProgramadas.EnableHeadersVisualStyles = false;
-            this.dgvCitasProgramadas.Location = new System.Drawing.Point(0, 30);
+            this.dgvCitasProgramadas.Location = new System.Drawing.Point(0, 37);
+            this.dgvCitasProgramadas.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dgvCitasProgramadas.MultiSelect = false;
             this.dgvCitasProgramadas.Name = "dgvCitasProgramadas";
             this.dgvCitasProgramadas.ReadOnly = true;
             this.dgvCitasProgramadas.RowHeadersVisible = false;
+            this.dgvCitasProgramadas.RowHeadersWidth = 51;
             this.dgvCitasProgramadas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCitasProgramadas.Size = new System.Drawing.Size(616, 476);
+            this.dgvCitasProgramadas.Size = new System.Drawing.Size(822, 585);
             this.dgvCitasProgramadas.TabIndex = 1;
             this.dgvCitasProgramadas.SelectionChanged += new System.EventHandler(this.dgvCitasProgramadas_SelectionChanged);
             // 
@@ -156,8 +163,9 @@ namespace medicitass
             this.lblTituloTabla.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.lblTituloTabla.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
             this.lblTituloTabla.Location = new System.Drawing.Point(0, 0);
+            this.lblTituloTabla.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTituloTabla.Name = "lblTituloTabla";
-            this.lblTituloTabla.Size = new System.Drawing.Size(616, 30);
+            this.lblTituloTabla.Size = new System.Drawing.Size(822, 37);
             this.lblTituloTabla.TabIndex = 0;
             this.lblTituloTabla.Text = "Citas Programadas Disponibles para Cancelar:";
             this.lblTituloTabla.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -182,9 +190,10 @@ namespace medicitass
             this.pnlDerecho.Controls.Add(this.lblIdCita);
             this.pnlDerecho.Controls.Add(this.lblTituloDetalle);
             this.pnlDerecho.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlDerecho.Location = new System.Drawing.Point(628, 12);
+            this.pnlDerecho.Location = new System.Drawing.Point(838, 15);
+            this.pnlDerecho.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pnlDerecho.Name = "pnlDerecho";
-            this.pnlDerecho.Size = new System.Drawing.Size(360, 506);
+            this.pnlDerecho.Size = new System.Drawing.Size(479, 622);
             this.pnlDerecho.TabIndex = 1;
             // 
             // btnLimpiar
@@ -194,9 +203,10 @@ namespace medicitass
             this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLimpiar.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnLimpiar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
-            this.btnLimpiar.Location = new System.Drawing.Point(185, 445);
+            this.btnLimpiar.Location = new System.Drawing.Point(247, 548);
+            this.btnLimpiar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(155, 40);
+            this.btnLimpiar.Size = new System.Drawing.Size(207, 49);
             this.btnLimpiar.TabIndex = 14;
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.UseVisualStyleBackColor = false;
@@ -209,9 +219,10 @@ namespace medicitass
             this.btnCancelarCita.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancelarCita.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnCancelarCita.ForeColor = System.Drawing.Color.White;
-            this.btnCancelarCita.Location = new System.Drawing.Point(20, 445);
+            this.btnCancelarCita.Location = new System.Drawing.Point(27, 548);
+            this.btnCancelarCita.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancelarCita.Name = "btnCancelarCita";
-            this.btnCancelarCita.Size = new System.Drawing.Size(155, 40);
+            this.btnCancelarCita.Size = new System.Drawing.Size(207, 49);
             this.btnCancelarCita.TabIndex = 13;
             this.btnCancelarCita.Text = "Cancelar Cita";
             this.btnCancelarCita.UseVisualStyleBackColor = false;
@@ -221,11 +232,12 @@ namespace medicitass
             // 
             this.txtMotivoCancelacion.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.txtMotivoCancelacion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
-            this.txtMotivoCancelacion.Location = new System.Drawing.Point(20, 340);
+            this.txtMotivoCancelacion.Location = new System.Drawing.Point(27, 418);
+            this.txtMotivoCancelacion.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtMotivoCancelacion.Multiline = true;
             this.txtMotivoCancelacion.Name = "txtMotivoCancelacion";
             this.txtMotivoCancelacion.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtMotivoCancelacion.Size = new System.Drawing.Size(320, 80);
+            this.txtMotivoCancelacion.Size = new System.Drawing.Size(425, 98);
             this.txtMotivoCancelacion.TabIndex = 12;
             // 
             // lblMotivoCancelacion
@@ -233,9 +245,10 @@ namespace medicitass
             this.lblMotivoCancelacion.AutoSize = true;
             this.lblMotivoCancelacion.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblMotivoCancelacion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(127)))), ((int)(((byte)(140)))));
-            this.lblMotivoCancelacion.Location = new System.Drawing.Point(17, 322);
+            this.lblMotivoCancelacion.Location = new System.Drawing.Point(23, 396);
+            this.lblMotivoCancelacion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMotivoCancelacion.Name = "lblMotivoCancelacion";
-            this.lblMotivoCancelacion.Size = new System.Drawing.Size(151, 15);
+            this.lblMotivoCancelacion.Size = new System.Drawing.Size(193, 20);
             this.lblMotivoCancelacion.TabIndex = 11;
             this.lblMotivoCancelacion.Text = "Motivo de Cancelación (*):";
             // 
@@ -243,10 +256,11 @@ namespace medicitass
             // 
             this.txtHora.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.txtHora.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
-            this.txtHora.Location = new System.Drawing.Point(185, 275);
+            this.txtHora.Location = new System.Drawing.Point(247, 338);
+            this.txtHora.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtHora.Name = "txtHora";
             this.txtHora.ReadOnly = true;
-            this.txtHora.Size = new System.Drawing.Size(155, 25);
+            this.txtHora.Size = new System.Drawing.Size(205, 30);
             this.txtHora.TabIndex = 10;
             // 
             // lblHora
@@ -254,9 +268,10 @@ namespace medicitass
             this.lblHora.AutoSize = true;
             this.lblHora.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHora.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
-            this.lblHora.Location = new System.Drawing.Point(182, 257);
+            this.lblHora.Location = new System.Drawing.Point(243, 316);
+            this.lblHora.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblHora.Name = "lblHora";
-            this.lblHora.Size = new System.Drawing.Size(36, 15);
+            this.lblHora.Size = new System.Drawing.Size(45, 20);
             this.lblHora.TabIndex = 9;
             this.lblHora.Text = "Hora:";
             // 
@@ -264,10 +279,11 @@ namespace medicitass
             // 
             this.txtFecha.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.txtFecha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
-            this.txtFecha.Location = new System.Drawing.Point(20, 275);
+            this.txtFecha.Location = new System.Drawing.Point(27, 338);
+            this.txtFecha.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtFecha.Name = "txtFecha";
             this.txtFecha.ReadOnly = true;
-            this.txtFecha.Size = new System.Drawing.Size(155, 25);
+            this.txtFecha.Size = new System.Drawing.Size(205, 30);
             this.txtFecha.TabIndex = 8;
             // 
             // lblFecha
@@ -275,9 +291,10 @@ namespace medicitass
             this.lblFecha.AutoSize = true;
             this.lblFecha.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFecha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
-            this.lblFecha.Location = new System.Drawing.Point(17, 257);
+            this.lblFecha.Location = new System.Drawing.Point(23, 316);
+            this.lblFecha.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFecha.Name = "lblFecha";
-            this.lblFecha.Size = new System.Drawing.Size(41, 15);
+            this.lblFecha.Size = new System.Drawing.Size(50, 20);
             this.lblFecha.TabIndex = 7;
             this.lblFecha.Text = "Fecha:";
             // 
@@ -285,10 +302,11 @@ namespace medicitass
             // 
             this.txtDoctor.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.txtDoctor.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
-            this.txtDoctor.Location = new System.Drawing.Point(20, 215);
+            this.txtDoctor.Location = new System.Drawing.Point(27, 265);
+            this.txtDoctor.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtDoctor.Name = "txtDoctor";
             this.txtDoctor.ReadOnly = true;
-            this.txtDoctor.Size = new System.Drawing.Size(320, 25);
+            this.txtDoctor.Size = new System.Drawing.Size(425, 30);
             this.txtDoctor.TabIndex = 6;
             // 
             // lblDoctor
@@ -296,9 +314,10 @@ namespace medicitass
             this.lblDoctor.AutoSize = true;
             this.lblDoctor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDoctor.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
-            this.lblDoctor.Location = new System.Drawing.Point(17, 197);
+            this.lblDoctor.Location = new System.Drawing.Point(23, 242);
+            this.lblDoctor.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDoctor.Name = "lblDoctor";
-            this.lblDoctor.Size = new System.Drawing.Size(46, 15);
+            this.lblDoctor.Size = new System.Drawing.Size(58, 20);
             this.lblDoctor.TabIndex = 5;
             this.lblDoctor.Text = "Doctor:";
             // 
@@ -306,10 +325,11 @@ namespace medicitass
             // 
             this.txtPaciente.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.txtPaciente.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
-            this.txtPaciente.Location = new System.Drawing.Point(20, 155);
+            this.txtPaciente.Location = new System.Drawing.Point(27, 191);
+            this.txtPaciente.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtPaciente.Name = "txtPaciente";
             this.txtPaciente.ReadOnly = true;
-            this.txtPaciente.Size = new System.Drawing.Size(320, 25);
+            this.txtPaciente.Size = new System.Drawing.Size(425, 30);
             this.txtPaciente.TabIndex = 4;
             // 
             // lblPaciente
@@ -317,9 +337,10 @@ namespace medicitass
             this.lblPaciente.AutoSize = true;
             this.lblPaciente.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPaciente.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
-            this.lblPaciente.Location = new System.Drawing.Point(17, 137);
+            this.lblPaciente.Location = new System.Drawing.Point(23, 169);
+            this.lblPaciente.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblPaciente.Name = "lblPaciente";
-            this.lblPaciente.Size = new System.Drawing.Size(55, 15);
+            this.lblPaciente.Size = new System.Drawing.Size(67, 20);
             this.lblPaciente.TabIndex = 3;
             this.lblPaciente.Text = "Paciente:";
             // 
@@ -327,10 +348,11 @@ namespace medicitass
             // 
             this.txtIdCita.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.txtIdCita.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
-            this.txtIdCita.Location = new System.Drawing.Point(20, 95);
+            this.txtIdCita.Location = new System.Drawing.Point(27, 117);
+            this.txtIdCita.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtIdCita.Name = "txtIdCita";
             this.txtIdCita.ReadOnly = true;
-            this.txtIdCita.Size = new System.Drawing.Size(120, 25);
+            this.txtIdCita.Size = new System.Drawing.Size(159, 30);
             this.txtIdCita.TabIndex = 2;
             // 
             // lblIdCita
@@ -338,9 +360,10 @@ namespace medicitass
             this.lblIdCita.AutoSize = true;
             this.lblIdCita.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblIdCita.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(52)))), ((int)(((byte)(58)))));
-            this.lblIdCita.Location = new System.Drawing.Point(17, 77);
+            this.lblIdCita.Location = new System.Drawing.Point(23, 95);
+            this.lblIdCita.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblIdCita.Name = "lblIdCita";
-            this.lblIdCita.Size = new System.Drawing.Size(45, 15);
+            this.lblIdCita.Size = new System.Drawing.Size(57, 20);
             this.lblIdCita.TabIndex = 1;
             this.lblIdCita.Text = "ID Cita:";
             // 
@@ -351,20 +374,22 @@ namespace medicitass
             this.lblTituloDetalle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.lblTituloDetalle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(127)))), ((int)(((byte)(140)))));
             this.lblTituloDetalle.Location = new System.Drawing.Point(0, 0);
+            this.lblTituloDetalle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTituloDetalle.Name = "lblTituloDetalle";
-            this.lblTituloDetalle.Size = new System.Drawing.Size(358, 45);
+            this.lblTituloDetalle.Size = new System.Drawing.Size(477, 55);
             this.lblTituloDetalle.TabIndex = 0;
             this.lblTituloDetalle.Text = "Detalle de Cancelación";
             this.lblTituloDetalle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FrmCancelarCita
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(247)))), ((int)(((byte)(251)))));
-            this.ClientSize = new System.Drawing.Size(1000, 600);
+            this.ClientSize = new System.Drawing.Size(1333, 738);
             this.Controls.Add(this.pnlContenedor);
             this.Controls.Add(this.pnlHeader);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "FrmCancelarCita";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MediCitas - Cancelar Cita Médica";

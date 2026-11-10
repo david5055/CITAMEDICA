@@ -5,11 +5,11 @@ using System.Windows.Forms;
 
 namespace medicitass
 {
-    public partial class FrmMantenimientoEspecialidades : Form
+    public partial class FrmMantenimientoEspecialidad : Form
     {
         private Conexion conexion = new Conexion();
 
-        public FrmMantenimientoEspecialidades()
+        public FrmMantenimientoEspecialidad()
         {
             InitializeComponent();
         }

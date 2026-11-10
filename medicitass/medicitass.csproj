@@ -54,6 +54,12 @@
     </Compile>
     <Compile Include="Conexion.cs" />
     <Compile Include="DoctorDavid.cs" />
+    <Compile Include="FrmAgendarCita.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAgendarCita.Designer.cs">
+      <DependentUpon>FrmAgendarCita.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmBusquedaGeneral.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,11 +114,11 @@
     <Compile Include="FrmMantenimientoUsuarios.Designer.cs">
       <DependentUpon>FrmMantenimientoUsuarios.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmMantenimientoEspecialidades.cs">
+    <Compile Include="FrmMantenimientoEspecialidad.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmMantenimientoEspecialidades.Designer.cs">
-      <DependentUpon>FrmMantenimientoEspecialidades.cs</DependentUpon>
+    <Compile Include="FrmMantenimientoEspecialidad.Designer.cs">
+      <DependentUpon>FrmMantenimientoEspecialidad.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmLogin.cs">
       <SubType>Form</SubType>
@@ -164,6 +170,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmAgendarCita.resx">
+      <DependentUpon>FrmAgendarCita.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmCancelarCita.resx">
       <DependentUpon>FrmCancelarCita.cs</DependentUpon>
     </EmbeddedResource>
@@ -185,8 +194,8 @@
     <EmbeddedResource Include="FrmMantenimientoDoctores.resx">
       <DependentUpon>FrmMantenimientoDoctores.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmMantenimientoEspecialidades.resx">
-      <DependentUpon>FrmMantenimientoEspecialidades.cs</DependentUpon>
+    <EmbeddedResource Include="FrmMantenimientoEspecialidad.resx">
+      <DependentUpon>FrmMantenimientoEspecialidad.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMantenimientoPacientes.resx">
       <DependentUpon>FrmMantenimientoPacientes.cs</DependentUpon>
